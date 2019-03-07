@@ -57,14 +57,11 @@ class ProcessOutput implements ShouldQueue
             if(isset($xml->ErrorList)==false)
             {
 
-
                 //build the query
                 $fetchPub = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&retmode=xml&rettype=abstract&query_key='.implode($xml->xpath('QueryKey')).'&WebEnv='.implode($xml->xpath('WebEnv'));
                 log::critical($fetchPub);
 
                 $xml = simplexml_load_file($fetchPub);
-
-
 
 
                 //Load into a DomDocument and print out

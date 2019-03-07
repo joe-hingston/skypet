@@ -55,10 +55,9 @@ class OutputFetcher
 
                 if ($item->title) { // Filter out the ones with no titles
 
-                    $output = Output::updateorCreate(['doi' => $item->DOI],
+                    $output  = $this->journal->outputs()->updateorCreate(['doi' => $item->DOI],
                         [
                             'doi'=> $item->DOI,
-                            'journal_id' => $this->journalID,
                             'reference_count' => $item->{'reference-count'},
                             'url'=>$item->URL,
                             'title'=>$item->title[0],
