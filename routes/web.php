@@ -22,12 +22,12 @@ Route::get('test', function(){
 
     foreach ($journals as $journal) {
         $fetcher = new \App\OutputFetcher(new Client(), $journal);
+
+        $fetcher->fetch();
     }
-   $fetcher->fetch();
-
-
 
 });
+
 Route::get('abstract', function(){
   dd(Output::whereNotNull('abstract')->get());
 

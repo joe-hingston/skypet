@@ -30,7 +30,9 @@ class OutputFetcher
     {
         $this->client = $client;
         $this->journal = $journal;
-        $this->apiUri = 'http://api.crossref.org/works?filter=issn:'. $journal->issn;
+
+        $this->setApiUri('http://api.crossref.org/works?filter=issn:'. $journal->issn);
+
         $this->setTotal(
             json_decode($this->client->request('GET', $this->buildURL())->getBody())->message->{'total-results'}
         );
@@ -41,45 +43,40 @@ class OutputFetcher
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function fetch($records = [])
+    public function fetch()
     {
-
-
-
         while ($this->offset < $this->total) {
+
             $res = $this->client->request('GET', $this->buildUrl());
+
             $decoded_items = json_decode($res->getBody())->message->items;
+
             foreach ($decoded_items as $item) {
 
+                if ($item->title) { // Filter out the ones with no titles
 
-            if (isset($item->title)) { // Filter out the ones with no titles
-                $output = Output::updateorCreate(['doi' => $item->DOI],
-                    [
-                        'doi'=> $item->DOI,
-                        'journal_id' => $this->journalID,
-                        'reference_count' => $item->{'reference-count'},
-                        'url'=>$item->URL,
-                        'title'=>$item->title[0],
-                        'issn'=>$item->ISSN[0],
-                        'publisher'=>$item->publisher,
-                        'language'=>$item->language,
-                        'is_referenced_by'=>$item->{'is-referenced-by-count'}
+                    $output = Output::updateorCreate(['doi' => $item->DOI],
+                        [
+                            'doi'=> $item->DOI,
+                            'journal_id' => $this->journalID,
+                            'reference_count' => $item->{'reference-count'},
+                            'url'=>$item->URL,
+                            'title'=>$item->title[0],
+                            'issn'=>$item->ISSN[0],
+                            'publisher'=>$item->publisher,
+                            'language'=>$item->language,
+                            'is_referenced_by'=>$item->{'is-referenced-by-count'}
+                        ]);
 
-                    ] );
+                    //Post processing
+                    ProcessOutput::dispatch($output, $item->DOI)->onConnection('redis'); //grab the abstract
 
-                //Post processing
-                ProcessOutput::dispatch($output, $item->DOI)->onConnection('redis'); //grab the abstract
-
-            }   };
-
-
+                }   
+            }
 
             $this->offset += $this->qty;
+
         }
-;
-
-
-        return $records;
     }
 
     /**
@@ -100,8 +97,6 @@ class OutputFetcher
      */
     public function setApiUri($url)
     {
-
-
         $this->apiUri = $url;
     }
 
