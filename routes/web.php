@@ -13,6 +13,7 @@ set_time_limit(0);
 |
 */
 
+use App\Output;
 use GuzzleHttp\Client;
 
 Route::get('test', function(){
@@ -20,11 +21,17 @@ Route::get('test', function(){
     $journals = \App\Journal::all();
 
     foreach ($journals as $journal) {
-        $fetcher = new \App\OutputFetcher(new Client(), $journal->issn);
-
-        dd($fetcher->fetch());
-        
+        $fetcher = new \App\OutputFetcher(new Client(), $journal);
     }
+   $fetcher->fetch();
+
+
+
+});
+Route::get('abstract', function(){
+  dd(Output::whereNotNull('abstract')->get());
+
+
 
 });
 
