@@ -13,4 +13,9 @@ class Output extends Model
     {
         return $this->belongsTo(Journal);
     }
+
+    public function outputreferences()
+    {
+        return $this->hasMany(OutputReferences::class);
+    }
 }

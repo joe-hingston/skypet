@@ -17,8 +17,6 @@ class CreateOutputsTable extends Migration
             $table->increments('id');
 
             $table->unsignedInteger('journal_id');
-
-
             $table->text('title')->nullable();
             $table->string('doi')->nullable();
             $table->string('publisher')->nullable();
@@ -32,8 +30,6 @@ class CreateOutputsTable extends Migration
             $table->binary('abstract')->nullable();
             $table->integer('is_referenced_by')->nullable();
             $table->foreign('journal_id')->references('id')->on('journals')->onDelete('cascade');
-
-
             $table->timestamps();
 
 

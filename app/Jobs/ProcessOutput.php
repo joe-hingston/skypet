@@ -30,11 +30,7 @@ class ProcessOutput implements ShouldQueue
      */
     public function __construct($doi)
     {
-
-
         $this->doi = $doi;
-
-        //
     }
 
     /**

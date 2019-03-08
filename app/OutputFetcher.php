@@ -5,6 +5,7 @@ namespace App;
 
 
 use App\Jobs\ProcessOutput;
+use App\Jobs\ProcessReference;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 
@@ -30,8 +31,9 @@ class OutputFetcher
     {
         $this->client = $client;
         $this->journal = $journal;
+        $email = "?mailto=afletcher53@gmail.com";
 
-        $this->setApiUri('http://api.crossref.org/works?filter=issn:'. $journal->issn);
+        $this->setApiUri('http://api.crossref.org/works?filter=issn:'. $journal->issn . $email);
 
         $this->setTotal(
             json_decode($this->client->request('GET', $this->buildURL())->getBody())->message->{'total-results'}
@@ -53,7 +55,7 @@ class OutputFetcher
 
             foreach ($decoded_items as $item) {
 
-                if ($item->title) { // Filter out the ones with no titles
+                if (isset($item->title)) { // Filter out the ones with no titles
 
                     $output  = $this->journal->outputs()->updateorCreate(['doi' => $item->DOI],
                         [
@@ -67,6 +69,15 @@ class OutputFetcher
                             'is_referenced_by'=>$item->{'is-referenced-by-count'}
                         ]);
 
+                    if (!isset($item->reference)) continue;
+                    foreach($item->reference as $reference){
+                        if (!isset($reference->DOI)) continue;
+                            $reference =  $output->outputreferences()->updateorCreate(['doi'=>$reference->DOI],
+                                ['doi'=>$reference->DOI]);
+
+                            //new output found so lets process it
+                             ProcessReference::dispatch($reference)->onConnection('redis');
+                          }
                     //Post processing
                     ProcessOutput::dispatch($output, $item->DOI)->onConnection('redis'); //grab the abstract
 
