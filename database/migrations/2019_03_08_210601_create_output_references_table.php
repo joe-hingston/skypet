@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJournalsTable extends Migration
+class CreateOutputReferencesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateJournalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('journals', function (Blueprint $table) {
+        Schema::create('output_references', function (Blueprint $table) {
             $table->increments('id');
-
-            $table->string('issn')->nullable();
-            $table->string('eissn')->nullable();
-            $table->string('created_date')->nullable();
-            $table->string('title')->nullable();
-            $table->integer('total_articles')->nullable();
+            $table->string('doi');
+            $table->integer('output_id');
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ class CreateJournalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('journals');
+        Schema::dropIfExists('output_references');
     }
 }

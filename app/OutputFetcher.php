@@ -4,10 +4,9 @@
 namespace App;
 
 
-use App\Jobs\ProcessOutput;
+use App\Jobs\ProcessAbstract;
 use App\Jobs\ProcessReference;
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Log;
 
 class OutputFetcher
 {
@@ -17,7 +16,7 @@ class OutputFetcher
 
     public $total;
 
-    public $qty = 1000;
+    public $qty = 1;
 
     public $offset = 0;
 
@@ -34,7 +33,6 @@ class OutputFetcher
         $email = "?mailto=afletcher53@gmail.com";
 
         $this->setApiUri('http://api.crossref.org/works?filter=issn:'. $journal->issn . $email);
-
         $this->setTotal(
             json_decode($this->client->request('GET', $this->buildURL())->getBody())->message->{'total-results'}
         );
@@ -76,10 +74,11 @@ class OutputFetcher
                                 ['doi'=>$reference->DOI]);
 
                             //new output found so lets process it
-                             ProcessReference::dispatch($reference)->onConnection('redis');
+                        ProcessReference::dispatch($reference->DOI)->onConnection('redis');
+
                           }
                     //Post processing
-                    ProcessOutput::dispatch($output, $item->DOI)->onConnection('redis'); //grab the abstract
+                    ProcessAbstract::dispatch($output, $item->DOI)->onConnection('redis'); //grab the abstract
 
                 }   
             }

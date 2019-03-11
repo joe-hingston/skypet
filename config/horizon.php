@@ -133,15 +133,16 @@ return [
                 'balance' => 'simple',
                 'processes' => 10,
                 'tries' => 3,
+                'timeout' => 1200,
             ],
         ],
 
         'local' => [
             'supervisor-1' => [
                 'connection' => 'redis',
-                'queue' => ['default'],
+                'queue' => ['journals', 'abstracts', 'dois'],
                 'balance' => 'simple',
-                'processes' => 3,
+                'processes' => 12,
                 'tries' => 3,
             ],
         ],

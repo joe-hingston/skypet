@@ -13,26 +13,17 @@ set_time_limit(0);
 |
 */
 
-use App\Output;
-use GuzzleHttp\Client;
+use App\Jobs\ProcessAbstract;
+use App\Jobs\ProcessJournal;
 
-Route::get('test', function(){
-
-    $journals = \App\Journal::all();
-
-    foreach ($journals as $journal) {
-        $fetcher = new \App\OutputFetcher(new Client(), $journal);
-
-        $fetcher->fetch();
-    }
-
+Route::get('doiseed', function () {
+    $this->doi = '10.1111/j.1939-1676.2009.0352.x';
+    ProcessAbstract::dispatch($this->doi)->onConnection('redis')->onQueue('abstracts');
 });
 
-Route::get('abstract', function(){
-  dd(Output::whereNotNull('abstract')->get());
-
-
-
+Route::get('journalseed', function () {
+    $this->issn = '1939-1676';
+    ProcessJournal::dispatch($this->issn)->onConnection('redis')->onQueue('journals'); //grab the abstract
 });
 
 Route::get('/', function () {
