@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Redis;
 
 class ProcessJournal implements ShouldQueue
@@ -46,6 +47,7 @@ class ProcessJournal implements ShouldQueue
     public function __construct($ISSN)
     {
         $this->issn = $ISSN;
+
     }
 
     /**
@@ -56,7 +58,8 @@ class ProcessJournal implements ShouldQueue
     public function handle()
     {
 
-        Redis::throttle('key')->allow(3)->every(1)->then(function () {
+        Redis::throttle('key')->allow(1)->every(1)->then(function () {
+            Log::alert("The Journal has been processed at :");
 
             $this->client = new Client();
             try {
@@ -64,11 +67,6 @@ class ProcessJournal implements ShouldQueue
                 $journalinfo = json_decode($this->client->get($this->getWorksUrl())->getBody());
                 $this->setTotal(json_decode($this->client->get($this->buildFilterUrl())->getBody())->message->{'total-results'});
 
-
-                //get the details of the journal from crossref;
-
-
-                //add the journal if not new
                 $journal = Journal::updateorCreate(['issn' => $this->issn], [
                     'issn' => $this->issn,
                     'total_articles' => $this->getTotal(),
@@ -76,12 +74,12 @@ class ProcessJournal implements ShouldQueue
                 ]);
 
                 $this->journal = Journal::find($journal->id);
-
-                //get the DOI's from the journal
                 $this->fetchDoiList();
             } catch (RequestException $e) {
                 return $e->getResponse()->getStatusCode();
             }
+        }, function () {
+            return $this->release(10);
 
         });
 
@@ -122,42 +120,12 @@ class ProcessJournal implements ShouldQueue
             $decoded_items = json_decode($res->getBody())->message->items;
 
             foreach ($decoded_items as $item) {
-
-                if (isset($item->title)) { // Filter out the ones with no titles
-
-                    $fields = [
-                        'doi' => $item->DOI,
-                        'reference_count' => $item->{'reference-count'},
-                        'url' => $item->URL,
-                        'title' => $item->title[0],
-                        'issn' => $item->ISSN[0],
-                        'publisher' => $item->publisher,
-                        'language' => $item->language,
-                        'is_referenced_by' => $item->{'is-referenced-by-count'}
-                    ];
-
-                    if (!empty($item->title)) {
-                        $fields['title'] = is_array($item->title ? array_shift($item->title) : $item->title;
-                    }
-
-                    $output = $this->journal->outputs()->updateorCreate(['doi' => $item->DOI], $fields);
-
-                    //get the abstract information
-                    ProcessAbstract::dispatch($output)->onConnection('redis')->onQueue('abstracts');
-
-                    //sleep for 1 second as to not hit the API limit
-                    sleep(HelperServiceProvider::getCrossRefRateLimit);
-                    //get the reference list and process
-                    //loop through references, place on outputreference stack
-                    //process all the articles from that journal if new
-                    //job maximum time is 15 minutes time out, need to speed up the checking
-                    //Stops at #44 journal - WHY?
-
-                }
-            }
-
+                ProcessDois::dispatch($item->DOI, $this->journal)->onConnection('redis')->onQueue('journals');
+                ProcessAbstract::dispatch($item->DOI)->onQueue('abstracts')->onConnection('redis')->delay(60);
+                sleep(1);
             $this->offset += $this->qty;
 
+        }
         }
     }
 
