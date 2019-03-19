@@ -76,17 +76,23 @@ class ProcessDois implements ShouldQueue
         $decoded_items = json_decode($res->getBody())->message;
 
         if (isset($decoded_items->title)) { // Filter out the ones with no titles
-            $this->journal->outputs()->updateorCreate(['doi' => $decoded_items->DOI],
-                [
-                    'doi' => $decoded_items->DOI,
-                    'reference_count' => $decoded_items->{'reference-count'},
-                    'url' => $decoded_items->URL,
-                    'title' => $decoded_items->title[0],
-                    'issn' => $decoded_items->ISSN[0],
-                    'publisher' => $decoded_items->publisher,
-                    'language' => $decoded_items->language,
-                    'is_referenced_by' => $decoded_items->{'is-referenced-by-count'}
-                ]);
+
+            $fields = [
+                'doi' => $decoded_items->DOI,
+                'reference_count' => $decoded_items->{'reference-count'},
+                'url' => $decoded_items->URL,
+                'issn' => $decoded_items->ISSN[0],
+                'publisher' => $decoded_items->publisher,
+                'language' => $decoded_items->language,
+                'is_referenced_by' => $decoded_items->{'is-referenced-by-count'}
+            ];
+
+            if (!empty($fields)) {
+                $fields['title'] = is_array($decoded_items->title) ? array_shift($decoded_items->title) : $decoded_items->title;
+            }
+
+            $this->journal->outputs()->updateorCreate(['doi' => $decoded_items->DOI], $fields);
+
         }
 
 
