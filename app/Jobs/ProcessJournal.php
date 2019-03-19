@@ -124,20 +124,23 @@ class ProcessJournal implements ShouldQueue
             foreach ($decoded_items as $item) {
 
                 if (isset($item->title)) { // Filter out the ones with no titles
-                    $output = $this->journal->outputs()->updateorCreate(['doi' => $item->DOI],
-                        [
-                            'doi' => $item->DOI,
-                            'reference_count' => $item->{'reference-count'},
-                            'url' => $item->URL,
-                            'title' => $item->title[0],
-                            'issn' => $item->ISSN[0],
-                            'publisher' => $item->publisher,
-                            'language' => $item->language,
-                            'is_referenced_by' => $item->{'is-referenced-by-count'}
-                        ]);
+
+                    $fields = [
+                        'doi' => $item->DOI,
+                        'reference_count' => $item->{'reference-count'},
+                        'url' => $item->URL,
+                        'title' => $item->title[0],
+                        'issn' => $item->ISSN[0],
+                        'publisher' => $item->publisher,
+                        'language' => $item->language,
+                        'is_referenced_by' => $item->{'is-referenced-by-count'}
+                    ];
+
+                    $output = $this->journal->outputs()->updateorCreate(['doi' => $item->DOI], $fields);
 
                     //get the abstract information
-                    ProcessAbstract::dispatch($item->DOI)->onConnection('redis')->onQueue('abstracts');
+                    ProcessAbstract::dispatch($output)->onConnection('redis')->onQueue('abstracts');
+
                     //sleep for 1 second as to not hit the API limit
                     sleep(HelperServiceProvider::getCrossRefRateLimit);
                     //get the reference list and process
