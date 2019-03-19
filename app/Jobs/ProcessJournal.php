@@ -136,6 +136,10 @@ class ProcessJournal implements ShouldQueue
                         'is_referenced_by' => $item->{'is-referenced-by-count'}
                     ];
 
+                    if (!empty($item->title)) {
+                        $fields['title'] = is_array($item->title ? array_shift($item->title) : $item->title;
+                    }
+
                     $output = $this->journal->outputs()->updateorCreate(['doi' => $item->DOI], $fields);
 
                     //get the abstract information

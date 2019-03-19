@@ -20,19 +20,18 @@ class ProcessAbstract implements ShouldQueue
 
     public $tries = 5;
     public $timeout = 120;
-    protected $output;
+    protected $doi;
 
 
 
     /**
      * Create a new job instance.
      *
-     * @param $output
      * @return void
      */
-    public function __construct(Output $output)
+    public function __construct($doi)
     {
-        $this->output = $output;
+        $this->doi = $doi;
     }
 
     /**
@@ -45,7 +44,7 @@ class ProcessAbstract implements ShouldQueue
 
         Redis::throttle('key')->allow(1)->every(1)->then(function () {
             // Job logic...
-            $url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&WebEnv=1&usehistory=y&term=' . $this->output->doi;
+            $url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&WebEnv=1&usehistory=y&term=' . $this->doi;
 
             $xml_str = file_get_contents($url); //grab the contents
             $xml = new SimpleXMLElement($xml_str); //convert to SimpleXML
@@ -62,22 +61,22 @@ class ProcessAbstract implements ShouldQueue
                 $dom->loadXML($xml->asXML());
                 $marker = $dom->getElementsByTagName('Abstract');
 
-                for ($i = $marker->length - 1; $i >= 0; $i--) {
-                    Output::where('doi', $this->output->doi)
-                        ->update(['abstract' => $marker->item($i)->textContent]);
-                }
 
+                for ($i = $marker->length - 1; $i >= 0; $i--) {
+                    Output::where('doi', $this->doi)->update(['abstract' => $marker->item($i)->textContent]);
+
+                }
                 sleep(HelperServiceProvider::getPubMedAPIRate);
 
+
             } else {
-                Log::error("Error locating DOI on Pubmed. Is this located on another site? DOI:" . $this->output->doi);
+                Log::error("Error locating DOI on Pubmed. Is this located on another site? DOI:" . $this->doi);
             }
 
         }, function () {
-
             // Could not obtain lock...
-            return $this->release(10);
 
+            return $this->release(10);
         });
     }
 }
