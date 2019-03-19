@@ -32,7 +32,7 @@ class ProcessJournal implements ShouldQueue
 
     public $total;
 
-    public $qty = 1000;
+    public $qty = 100;
 
     public $offset = 0;
 
@@ -120,10 +120,15 @@ class ProcessJournal implements ShouldQueue
             $decoded_items = json_decode($res->getBody())->message->items;
 
             foreach ($decoded_items as $item) {
-                ProcessDois::dispatch($item->DOI, $this->journal)->onConnection('redis')->onQueue('journals');
-                ProcessAbstract::dispatch($item->DOI)->onQueue('abstracts')->onConnection('redis')->delay(60);
-                sleep(1);
-            $this->offset += $this->qty;
+
+                ProcessDois::withChain([
+                    new ProcessAbstract($item->DOI),
+                ])->dispatch($item->DOI, $this->journal)->onConnection('redis')->onQueue('journals');
+
+//                ProcessDois::dispatch($item->DOI, $this->journal)->onConnection('redis')->onQueue('journals');
+//                ProcessAbstract::dispatch($item->DOI)->onQueue('abstracts')->onConnection('redis')->delay(60);
+
+                $this->offset += $this->qty;
 
         }
         }
