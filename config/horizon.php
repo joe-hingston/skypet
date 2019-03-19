@@ -144,6 +144,7 @@ return [
                 'balance' => 'simple',
                 'processes' => 12,
                 'tries' => 3,
+                'block_for' => 5,
             ],
         ],
     ],

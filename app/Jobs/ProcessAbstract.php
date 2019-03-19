@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Output;
-use App\Providers\HelperServiceProvider;
 use DOMDocument;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -42,10 +41,9 @@ class ProcessAbstract implements ShouldQueue
     public function handle()
     {
 
-        Redis::throttle('key')->allow(1)->every(1)->then(function () {
+        Redis::throttle('key')->allow(1)->every(5)->then(function () {
             // Job logic...
             $url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&WebEnv=1&usehistory=y&term=' . $this->doi;
-
             $xml_str = file_get_contents($url); //grab the contents
             $xml = new SimpleXMLElement($xml_str); //convert to SimpleXML
 
@@ -66,9 +64,6 @@ class ProcessAbstract implements ShouldQueue
                     Output::where('doi', $this->doi)->update(['abstract' => $marker->item($i)->textContent]);
 
                 }
-                sleep(HelperServiceProvider::getPubMedAPIRate);
-
-
             } else {
                 Log::error("Error locating DOI on Pubmed. Is this located on another site? DOI:" . $this->doi);
             }
