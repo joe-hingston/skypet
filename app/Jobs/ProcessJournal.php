@@ -11,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Redis;
 
 class ProcessJournal implements ShouldQueue
@@ -32,7 +31,7 @@ class ProcessJournal implements ShouldQueue
 
     public $total;
 
-    public $qty = 100;
+    public $qty = 10;
 
     public $offset = 0;
 
@@ -59,7 +58,6 @@ class ProcessJournal implements ShouldQueue
     {
 
         Redis::throttle('key')->allow(1)->every(1)->then(function () {
-            Log::alert("The Journal has been processed at :");
 
             $this->client = new Client();
             try {
@@ -123,10 +121,8 @@ class ProcessJournal implements ShouldQueue
 
                 ProcessDois::withChain([
                     new ProcessAbstract($item->DOI),
-                ])->dispatch($item->DOI, $this->journal)->onConnection('redis')->onQueue('journals');
+                ])->dispatch($item->DOI, $this->journal);
 
-//                ProcessDois::dispatch($item->DOI, $this->journal)->onConnection('redis')->onQueue('journals');
-//                ProcessAbstract::dispatch($item->DOI)->onQueue('abstracts')->onConnection('redis')->delay(60);
 
                 $this->offset += $this->qty;
 

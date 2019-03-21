@@ -22,7 +22,6 @@ class ProcessAbstract implements ShouldQueue
     protected $doi;
 
 
-
     /**
      * Create a new job instance.
      *
@@ -30,6 +29,9 @@ class ProcessAbstract implements ShouldQueue
      */
     public function __construct($doi)
     {
+
+        $this->onQueue('abstracts');
+        $this->onConnection('redis');
         $this->doi = $doi;
     }
 
@@ -74,4 +76,6 @@ class ProcessAbstract implements ShouldQueue
             return $this->release(10);
         });
     }
+
+
 }

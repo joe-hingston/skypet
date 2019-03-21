@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Redis;
 
 class ProcessDois implements ShouldQueue
@@ -43,6 +44,9 @@ class ProcessDois implements ShouldQueue
 
     public function __construct($doi, Journal $journal)
     {
+
+        $this->onQueue('journals');
+        $this->onConnection('redis');
         $this->doi = $doi;
         $this->journal = Journal::find($journal->id);
     }
@@ -87,11 +91,13 @@ class ProcessDois implements ShouldQueue
                 'is_referenced_by' => $decoded_items->{'is-referenced-by-count'}
             ];
 
-            if (!empty($fields)) {
                 $fields['title'] = is_array($decoded_items->title) ? array_shift($decoded_items->title) : $decoded_items->title;
-            }
+
 
             $this->journal->outputs()->updateorCreate(['doi' => $decoded_items->DOI], $fields);
+
+            //cycle through the references and add them to output_reference
+            Log::alert($decoded_items->reference);
 
         }
 
