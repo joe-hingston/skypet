@@ -41,6 +41,7 @@ class AddJournal extends Command
      */
     public function handle()
     {
+
         $issn = $this->ask('What is the journal ISSN?');
         $validator = Validator::make([
             'issn' => $issn,
