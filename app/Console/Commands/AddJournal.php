@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\ProcessJournal;
 use Illuminate\Console\Command;
+use Validator;
+
 
 class AddJournal extends Command
 {
@@ -11,7 +14,7 @@ class AddJournal extends Command
      *
      * @var string
      */
-    protected $signature = 'journal:add {--issn=}';
+    protected $signature = 'journal:add';
 
     /**
      * The console command description.
@@ -28,6 +31,7 @@ class AddJournal extends Command
     public function __construct()
     {
         parent::__construct();
+
     }
 
     /**
@@ -37,7 +41,20 @@ class AddJournal extends Command
      */
     public function handle()
     {
-        $this->issn = $this->argument('issn');
-        print_r($this->issn);
+        $issn = $this->ask('What is the journal ISSN?');
+        $validator = Validator::make([
+            'issn' => $issn,
+        ], [
+            'issn' => ['required', 'min:9'],
+        ]);
+        If ($validator->fails()) {
+            $this->info('Journal Not added, see error message below');
+            foreach ($validator->errors()->all() as $error) {
+                $this->error($error);
+            }
+            return 1;
+        }
+        $validator->errors()->all();
+        ProcessJournal::dispatch($issn)->onConnection('redis')->onQueue('journals');
     }
 }
