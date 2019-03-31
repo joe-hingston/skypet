@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Output;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -29,7 +30,7 @@ class OutputEvent
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|array
      */
 
     public function outputCreated(Output $output)
@@ -44,7 +45,7 @@ class OutputEvent
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|array
      */
 
     public function outputUpdated(Output $output)
@@ -59,7 +60,7 @@ class OutputEvent
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|array
      */
 
     public function outputDeleted(Output $output)

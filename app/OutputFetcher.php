@@ -7,6 +7,7 @@ namespace App;
 use App\Jobs\ProcessAbstract;
 use App\Jobs\ProcessReference;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 
 class OutputFetcher
 {
@@ -41,7 +42,7 @@ class OutputFetcher
     /**
      * @param array $records
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function fetch()
     {

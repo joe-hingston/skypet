@@ -3,7 +3,8 @@
 namespace App\Jobs;
 
 use App\Journal;
-use App\Output;
+use App\Providers\HelperServiceProvider;
+use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -18,6 +19,7 @@ class ProcessReference implements ShouldQueue
     public $tries = 5;
     public $timeout = 120;
     protected $doi;
+    public $client;
 
 
     /**
@@ -38,80 +40,31 @@ class ProcessReference implements ShouldQueue
     public function handle()
     {
 
-        Redis::throttle('key')->allow(3)->every(1)->then(function () {
+        Redis::throttle('key')->allow(1)->every(1)->then(function () {
+            $this->client = new Client();
+            $res = $this->client->get($this->buildFilterUrl());
 
-            $this->setApiUri('https://api.crossref.org/works/' . $this->doi);
-            $client = new \GuzzleHttp\Client();
-            $response = $client->request('GET', $this->getApiUri());
-            $this->output = json_decode($response->getBody())->message;
+            $decoded_items = json_decode($res->getBody())->message;
 
-            // Job logic...
-
-            //create journal entry if non made
-            Journal::updateOrCreate(['issn' => $this->output->ISSN[0]], [
-                'issn' => $this->output->ISSN[0],
-                'eissn' => $this->output->ISSN[0]
-            ]);
+            //check to see what ISSN is given, and exists in the database
+            $this->issn = collect($decoded_items->{'issn-type'})->where('type', 'print')->first();
 
 
-            //add Output
+            $journal = Journal::where('issn', $this->issn->value);
+            if (!$journal->exists()) {
+                ProcessJournal::dispatch($this->issn->value)->onConnection('redis')->onQueue('journals');
+            };
 
-            Output::updateOrCreate(['doi' => $this->output->doi], [
-                    'doi' => $this->output->DOI,
-                    'reference_count' => $this->output->{'reference-count'},
-                    'url' => $this->output->URL,
-                    'title' => $this->output->title[0],
-                    'issn' => $this->output->ISSN[0],
-                    'publisher' => $this->output->publisher,
-                    'language' => $this->output->language,
-                    'is_referenced_by' => $this->output->{'is-referenced-by-count'}
-                ]
-            );
-
-            //Process Abstract
-            ProcessAbstract::dispatch($this->output, $this->output->DOI)->onConnection('redis'); //grab the abstract
-
+        }, function () {
+            return $this->release(10);
 
         });
     }
 
-    /**
-     * @param $url
-     */
-    public function setApiUri($url)
+
+    public function buildFilterUrl()
     {
-        $this->apiUri = $url;
+        $this->filterUrl = 'https://api.crossref.org/works/:'.$this->doi.'?mailto='.HelperServiceProvider::getApiemail();
+        return $this->filterUrl;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getApiUri()
-    {
-        return $this->apiUri;
-    }
-
-    public function buildUrl()
-    {
-
-        return $this->apiUri . http_build_query([
-                'offset' => $this->offset,
-                'rows' => $this->qty
-            ]);
-    }
-
-    /**
-     * @param $total
-     */
-    public function setTotal($total)
-    {
-        $this->total = $total;
-    }
-
-
-    public function getTotal($total)
-    {
-        return $this->total;
-    }
-
 }

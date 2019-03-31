@@ -11,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Redis;
 
 class ProcessDois implements ShouldQueue
@@ -79,6 +78,7 @@ class ProcessDois implements ShouldQueue
         $res = $this->client->get($this->buildFilterUrl());
         $decoded_items = json_decode($res->getBody())->message;
 
+
         if (isset($decoded_items->title)) { // Filter out the ones with no titles
 
             $fields = [
@@ -91,13 +91,17 @@ class ProcessDois implements ShouldQueue
                 'is_referenced_by' => $decoded_items->{'is-referenced-by-count'}
             ];
 
-                $fields['title'] = is_array($decoded_items->title) ? array_shift($decoded_items->title) : $decoded_items->title;
-
+            //Flatten array of titles
+            $fields['title'] = is_array($decoded_items->title) ? array_shift($decoded_items->title) : $decoded_items->title;
 
             $this->journal->outputs()->updateorCreate(['doi' => $decoded_items->DOI], $fields);
 
             //cycle through the references and add them to output_reference
-            Log::alert($decoded_items->reference);
+            foreach ($decoded_items->reference as $reference) {
+                if (isset($reference->DOI)) {
+                    ProcessReference::dispatch($reference->DOI)->onConnection('redis')->onQueue('journals');
+                }
+            }
 
         }
 
@@ -107,7 +111,7 @@ class ProcessDois implements ShouldQueue
 
     public function buildFilterUrl()
     {
-        $this->filterUrl = 'https://api.crossref.org/works/:' . $this->doi . '?mailto=' . HelperServiceProvider::getApiemail();
+        $this->filterUrl = 'https://api.crossref.org/works/:'.$this->doi.'?mailto='.HelperServiceProvider::getApiemail();
         return $this->filterUrl;
     }
 
