@@ -16,7 +16,7 @@ class ProcessReference implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $tries = 5;
+    public $tries = 3;
     public $timeout = 120;
     protected $doi;
     public $client;

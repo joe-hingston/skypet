@@ -31,7 +31,7 @@ class ProcessJournal implements ShouldQueue
 
     public $total;
 
-    public $qty = 10;
+    public $qty = 1000;
 
     public $offset = 0;
 

@@ -13,19 +13,45 @@ set_time_limit(0);
 |
 */
 
-use App\Jobs\ProcessDois;
 use App\Jobs\ProcessJournal;
-use App\Journal;
 
-Route::get('doi', function () {
-    $journal = Journal::firstorNew(['issn' => '0891-6640']);
-    $journal->save();
+Route::get('abstract', function () {
+    $this->doi = "10.1111/jvim.12275";
+    $url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&WebEnv=1&usehistory=y&term='.$this->doi;
+    $xml_str = file_get_contents($url); //grab the contents
+    $xml = new SimpleXMLElement($xml_str); //convert to SimpleXML
+    $xmlid = $xml->xpath('IdList/Id');
+    $xmlid = strval($xmlid[0]);
 
 
+    if (isset($xml->ErrorList) == false) {
 
-    $journal = Journal::find(1);
-    //Process specific DOIs
-    ProcessDois::dispatch('10.1111/j.1939-1676.2009.0352.x', $journal)->onConnection('redis')->onQueue('journals');
+
+        $curl = curl_init();
+        $field = array('db' => 'pubmed', 'retmode' => 'text', 'rettype' => 'abstract', 'id' => $xmlid);
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?".http_build_query($field),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_TIMEOUT => 30000,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+
+            CURLINFO_HEADER_OUT => true,
+            CURLOPT_HTTPHEADER => array(
+                // Set Here Your Requesred Headers
+                'Content-Type: application/json',
+            ),
+        ));
+
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+
+
+    }
 });
 
 Route::get('journalseed', function () {
