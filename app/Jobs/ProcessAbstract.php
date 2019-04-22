@@ -8,9 +8,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Redis;
 use SimpleXMLElement;
+use Illuminate\Support\Facades\Event;
 
 class ProcessAbstract implements ShouldQueue
 {
@@ -45,10 +45,11 @@ class ProcessAbstract implements ShouldQueue
         Redis::throttle('key')->allow(1)->every(5)->then(function () {
             // Job logic...
 
-            $url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&WebEnv=1&usehistory=y&term='.$this->doi;
-            $xml_str = file_get_contents($url); //grab the contents
+            $xml_str = file_get_contents($this->getAPIUrl()); //grab the contents
             $xml = new SimpleXMLElement($xml_str); //convert to SimpleXML
             $xmlid = $xml->xpath('IdList/Id');
+
+            //TODO This is a hash
             $xmlid = strval($xmlid[0]);
 
 
@@ -66,7 +67,6 @@ class ProcessAbstract implements ShouldQueue
                     CURLOPT_TIMEOUT => 30000,
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_CUSTOMREQUEST => "GET",
-
                     CURLINFO_HEADER_OUT => true,
                     CURLOPT_HTTPHEADER => array(
                         'Content-Type: application/json',
@@ -75,7 +75,7 @@ class ProcessAbstract implements ShouldQueue
 
                 $response = curl_exec($curl);
                 $err = curl_error($curl);
-                
+
 
                 Output::where('doi', $this->doi)->update(['abstract' => $response]);
                 curl_close($curl);
@@ -83,13 +83,18 @@ class ProcessAbstract implements ShouldQueue
             }
             sleep(1);
 
-
+            Event::fire('abstract.created', $this->doi);
 
         }, function () {
             // Could not obtain lock...
 
             return $this->release(10);
         });
+    }
+
+
+    public function getAPIUrl (){
+      return  'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&WebEnv=1&usehistory=y&term='.$this->doi;
     }
 
 

@@ -79,7 +79,17 @@ class EventServiceProvider extends ServiceProvider
 
             'App\Events\ReferenceEvent@referenceNotNullJournal',
 
-        ]
+        ],
+        'abstract.emptyabstractcronjobran' => [
+
+            'App\Events\AbstractEvent@EmptyAbstractRan',
+
+        ],
+        'abstract.abstractcreated' => [
+
+            'App\Events\AbstractEvent@created',
+
+        ],
 
 
     ];

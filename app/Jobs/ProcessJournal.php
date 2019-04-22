@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Event;
 use Redis;
 
 class ProcessJournal implements ShouldQueue
@@ -46,7 +47,8 @@ class ProcessJournal implements ShouldQueue
     public function __construct($issn)
     {
         $this->issn = $issn;
-
+        $this->onQueue('journals');
+        $this->onConnection('redis');
     }
 
     /**
@@ -70,6 +72,8 @@ class ProcessJournal implements ShouldQueue
                     'title' => $journalinfo->message->title
                 ]);
 
+                //Fire off events for creation
+                if($journal->wasRecentlyCreated){Event::fire('reference.notnulljournal', $journal);} else {Event::fire('reference.referenceNullJournal', $journal);};
 
                 $this->journal = Journal::find($journal->id);
                 $this->fetchDoiList();

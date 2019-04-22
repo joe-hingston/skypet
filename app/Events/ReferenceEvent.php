@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Journal;
 use App\Output;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -45,17 +46,17 @@ class ReferenceEvent
 
     }
 
-    public function referenceNullJournal(Output $output)
+    public function referenceNullJournal(Journal $journal)
     {
 
-        Log::info("References scan didn't locate a new journal for : ".$output->doi);
+        Log::info("References scan didn't locate a new journal for : ". $journal->issn);
 
     }
 
-    public function referenceNotNullJournal(Output $output)
+    public function referenceNotNullJournal(Journal $journal)
     {
 
-        Log::info("References scan located a new journal for : ".$output->doi);
+        Log::info("References scan located a new journal with ISSN, added to database : ".$journal->issn);
 
     }
 

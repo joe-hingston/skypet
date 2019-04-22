@@ -104,10 +104,7 @@ class ProcessDois implements ShouldQueue
             foreach ($decoded_items->reference as $reference) {
                 if (isset($reference->DOI)) {
                     ProcessReference::dispatch($reference->DOI)->onConnection('redis')->onQueue('journals');
-                    Event::fire('reference.notnulljournal', $output);
 
-                } else {
-                    Event::fire('reference.nulljournal', $output);
                 }
             }
 
