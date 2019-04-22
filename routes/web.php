@@ -13,26 +13,63 @@ set_time_limit(0);
 |
 */
 
-use App\Jobs\ProcessAbstract;
-use App\Jobs\ProcessDois;
+
 use App\Jobs\ProcessJournal;
-use App\Journal;
+use App\Output;
 
-Route::get('doiseed', function () {
-    $this->doi = '10.1111/j.1939-1676.2009.0352.x';
-    ProcessAbstract::dispatch($this->doi)->onConnection('redis')->onQueue('abstracts');
-});
-Route::get('test', function () {
-    $journal = Journal::find(1);
-
-    //Process specific DOIs
-    ProcessDois::dispatch('10.1111/j.1939-1676.2009.0352.x', $journal)->onConnection('redis')->onQueue('journals');
-});
 
 Route::get('journalseed', function () {
 
     //Add new Journal to the que
     ProcessJournal::dispatch('0891-6640')->onConnection('redis')->onQueue('journals');
+
+});
+
+Route::get('emptyabstracts', function () {
+
+    //Job to search for the empty abstracts and try to update them
+    $outputs = Output::where('abstract', null)->get();
+    foreach ($outputs as $item) {
+
+        $url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&WebEnv=1&usehistory=y&term='.$item->doi;
+        $xml_str = file_get_contents($url); //grab the contents
+        $xml = new SimpleXMLElement($xml_str); //convert to SimpleXML
+
+        // removes all the actual ones without any abstracts, content pages etc
+        if (!empty($xml->ErrorList)) {
+            $outputs->forget($item->id);
+        } // hasnt thrown an error so why is it not putting the abstract?
+        else {
+            $xmlid = $xml->xpath('IdList/Id');
+            $xmlid = strval($xmlid[0]);
+            $curl = curl_init();
+            $field = array('db' => 'pubmed', 'retmode' => 'text', 'rettype' => 'abstract', 'id' => $xmlid);
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?".http_build_query($field),
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_TIMEOUT => 30000,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+
+                CURLINFO_HEADER_OUT => true,
+                CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json',
+                ),
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            Output::where('doi', $item->doi)->update(['abstract' => $response]);
+
+        }
+        sleep(1);
+
+
+    }
+
+
 
 
 
@@ -45,3 +82,4 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
