@@ -39,7 +39,49 @@ class EventServiceProvider extends ServiceProvider
 
             'App\Events\OutputEvent@outputDeleted',
 
+        ],
+
+        'journal.created' => [
+
+            'App\Events\JournalEvent@journalCreated',
+
+        ],
+
+        'journal.updated' => [
+
+            'App\Events\JournalEvent@journalUpdated',
+
+        ],
+
+        'journal.deleted' => [
+
+            'App\Events\JournalEvent@journalDeleted',
+
+        ],
+        'reference.started' => [
+
+            'App\Events\ReferenceEvent@referenceStarted',
+
+        ],
+
+        'reference.ended' => [
+
+            'App\Events\ReferenceEvent@referenceEnded',
+
+        ],
+
+        'reference.nulljournal' => [
+
+            'App\Events\ReferenceEvent@referenceNullJournal',
+
+        ],
+        'reference.notnulljournal' => [
+
+            'App\Events\ReferenceEvent@referenceNotNullJournal',
+
         ]
+
+
     ];
 
     /**

@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Event;
 use Redis;
 
 class ProcessDois implements ShouldQueue
@@ -94,14 +95,24 @@ class ProcessDois implements ShouldQueue
             //Flatten array of titles
             $fields['title'] = is_array($decoded_items->title) ? array_shift($decoded_items->title) : $decoded_items->title;
 
-            $this->journal->outputs()->updateorCreate(['doi' => $decoded_items->DOI], $fields);
+            $output = $this->journal->outputs()->updateorCreate(['doi' => $decoded_items->DOI], $fields);
+
+            //Reference Event fire
+            Event::fire('reference.started', $output);
 
             //cycle through the references and add them to output_reference
             foreach ($decoded_items->reference as $reference) {
                 if (isset($reference->DOI)) {
                     ProcessReference::dispatch($reference->DOI)->onConnection('redis')->onQueue('journals');
+                    Event::fire('reference.notnulljournal', $output);
+
+                } else {
+                    Event::fire('reference.nulljournal', $output);
                 }
             }
+
+            //Reference Event fire
+            Event::fire('reference.ended', $output);
 
         }
 

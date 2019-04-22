@@ -31,7 +31,7 @@ class ProcessJournal implements ShouldQueue
 
     public $total;
 
-    public $qty = 1000;
+    public $qty = 200;
 
     public $offset = 0;
 
@@ -43,9 +43,9 @@ class ProcessJournal implements ShouldQueue
 
     public $journal;
 
-    public function __construct($ISSN)
+    public function __construct($issn)
     {
-        $this->issn = $ISSN;
+        $this->issn = $issn;
 
     }
 
@@ -63,13 +63,13 @@ class ProcessJournal implements ShouldQueue
             try {
 
                 $journalinfo = json_decode($this->client->get($this->getWorksUrl())->getBody());
-                $this->setTotal(json_decode($this->client->get($this->buildFilterUrl())->getBody())->message->{'total-results'});
-
+                $this->setTotal(json_decode($this->client->get($this->getWorksUrl())->getBody())->message->counts->{'total-dois'});
                 $journal = Journal::updateorCreate(['issn' => $this->issn], [
                     'issn' => $this->issn,
                     'total_articles' => $this->getTotal(),
                     'title' => $journalinfo->message->title
                 ]);
+
 
                 $this->journal = Journal::find($journal->id);
                 $this->fetchDoiList();
@@ -85,12 +85,13 @@ class ProcessJournal implements ShouldQueue
 
     public function getWorksUrl()
     {
-        return 'https://api.crossref.org/journals/' . $this->issn . 'mailto=' . HelperServiceProvider::getApiemail();
+        return 'https://api.crossref.org/journals/'.$this->issn.'works?mailto='.HelperServiceProvider::getApiemail();
     }
 
     public function buildFilterUrl()
     {
-        $this->filterUrl = 'http://api.crossref.org/works?filter=issn:' . $this->issn . '?mailto=' . HelperServiceProvider::getApiemail();
+
+        $this->filterUrl = 'http://api.crossref.org/works?filter=issn:'.$this->issn.'?mailto='.HelperServiceProvider::getApiemail();
         return $this->filterUrl . http_build_query([
                 'offset' => $this->offset,
                 'rows' => $this->qty
@@ -112,7 +113,8 @@ class ProcessJournal implements ShouldQueue
 
     public function fetchDoiList()
     {
-        while ($this->offset < $this->total) {
+
+        while ($this->offset < $this->getTotal()) {
 
             $res = $this->client->get($this->buildFilterUrl());
             $decoded_items = json_decode($res->getBody())->message->items;
@@ -122,7 +124,6 @@ class ProcessJournal implements ShouldQueue
                 ProcessDois::withChain([
                     new ProcessAbstract($item->DOI),
                 ])->dispatch($item->DOI, $this->journal);
-
 
                 $this->offset += $this->qty;
 
@@ -146,8 +147,4 @@ class ProcessJournal implements ShouldQueue
         $this->apiUri = $url;
     }
 
-    private function getFilterUrl()
-    {
-        return 'http://api.crossref.org/works?filter=issn:' . $this->issn . '?mailto=' . HelperServiceProvider::getApiemail();
-    }
 }

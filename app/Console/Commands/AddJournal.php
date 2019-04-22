@@ -21,7 +21,7 @@ class AddJournal extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Add a journal for skynet';
 
     /**
      * Create a new command instance.

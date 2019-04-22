@@ -8,7 +8,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Redis;
 use SimpleXMLElement;
 
@@ -73,14 +72,11 @@ class ProcessAbstract implements ShouldQueue
                     ),
                 ));
 
-                Log::alert(curl_getinfo($curl, CURLINFO_EFFECTIVE_URL));
-
                 $response = curl_exec($curl);
                 $err = curl_error($curl);
-                curl_close($curl);
-
 
                 Output::where('doi', $this->doi)->update(['abstract' => $response]);
+                curl_close($curl);
 
             }
 

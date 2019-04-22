@@ -11,14 +11,14 @@ class StartSkynet extends Command
      *
      * @var string
      */
-    protected $signature = 'start:skynet';
+    protected $signature = 'start:skypet';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Start the skypet for testing purposes';
 
     /**
      * Create a new command instance.
@@ -46,6 +46,9 @@ class StartSkynet extends Command
         sleep(1);
         $this->line('<fg=red>Starting Horizon</>');
         $this->call('horizon');
+        sleep(1);
+        $this->line('<fg=red>Adding test journal</>');
+        $this->call('journal:add', ['issn' => '0891-6640']);
         //
     }
 }

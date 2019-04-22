@@ -2,24 +2,22 @@
 
 namespace App\Events;
 
-use App\Output;
+use App\Journal;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class OutputEvent
+class JournalEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-
     public function __construct()
 
     {
@@ -33,11 +31,10 @@ class OutputEvent
      * @return Channel|array
      */
 
-    public function outputCreated(Output $output)
-
+    public function journalCreated(Journal $journal)
     {
 
-        Log::info("Output Created with ID: ".$output->doi);
+        Log::info("Journal Created with ID: ".$journal->id);
 
     }
 
@@ -48,11 +45,10 @@ class OutputEvent
      * @return Channel|array
      */
 
-    public function outputUpdated(Output $output)
-
+    public function journalUpdated(Journal $journal)
     {
 
-        Log::info("Output Updated with DOI: ".$output->doi);
+        Log::info("Journal updated with ID: ".$journal->id);
 
     }
 
@@ -63,11 +59,10 @@ class OutputEvent
      * @return Channel|array
      */
 
-    public function outputDeleted(Output $output)
-
+    public function journalDeleted(Journal $journal)
     {
 
-        Log::info("Output Deletec with DOI: ".$output->doi);
+        Log::info("Journal deleted with ID: ".$journal->id);
 
     }
 }
