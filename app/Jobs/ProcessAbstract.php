@@ -8,9 +8,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Redis;
 use SimpleXMLElement;
 use Illuminate\Support\Facades\Event;
+use Exception;
 
 class ProcessAbstract implements ShouldQueue
 {
@@ -19,6 +22,7 @@ class ProcessAbstract implements ShouldQueue
     public $tries = 3;
     public $timeout = 120;
     protected $doi;
+    protected $err;
 
 
     /**
@@ -55,8 +59,6 @@ class ProcessAbstract implements ShouldQueue
 
 
             if (isset($xml->ErrorList) == false) {
-
-
                 $curl = curl_init();
                 $field = array('db' => 'pubmed', 'retmode' => 'text', 'rettype' => 'abstract', 'id' => $xmlid);
 
@@ -74,8 +76,7 @@ class ProcessAbstract implements ShouldQueue
                 ));
 
                 $response = curl_exec($curl);
-                $err = curl_error($curl);
-
+                $this->err = curl_error($curl);
 
                 Output::where('doi', $this->doi)->update(['abstract' => $response]);
                 curl_close($curl);
@@ -87,7 +88,6 @@ class ProcessAbstract implements ShouldQueue
 
         }, function () {
             // Could not obtain lock...
-
             return $this->release(10);
         });
     }
@@ -97,5 +97,10 @@ class ProcessAbstract implements ShouldQueue
       return  'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&WebEnv=1&usehistory=y&term='.$this->doi;
     }
 
+    public function failed(Exception $exception)
+    {
+        $errormsg = "Failed Abstract with DOI: " . $this->doi;
+        Log::error($errormsg);
+    }
 
 }

@@ -26,5 +26,13 @@ Route::get('journalseed', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', function()
+{
+
+    $pattern        = '/^10.\d{4,9}/[-._;()/:A-Z0-9]+$/i';
+    $replacement    = "10.1111/j.1939-1676.1999.tb02217.x";
+    $html = preg_match($pattern, $replacement);
+
+    dd($html);
+});
 

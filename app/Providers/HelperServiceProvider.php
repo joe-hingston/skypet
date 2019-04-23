@@ -8,6 +8,7 @@ class HelperServiceProvider extends ServiceProvider
 {
     const getCrossRefRateLimit = 1;
     const getPubMedAPIRate = 1;
+    const getDOIRegEx = '\b(10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?!["&\'<>])\S)+)\b';
 
     public static function getApiemail()
     {

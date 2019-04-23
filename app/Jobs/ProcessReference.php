@@ -10,6 +10,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Redis;
 
 class ProcessReference implements ShouldQueue
@@ -20,6 +22,7 @@ class ProcessReference implements ShouldQueue
     public $timeout = 120;
     protected $doi;
     public $client;
+
 
 
     /**
@@ -46,10 +49,11 @@ class ProcessReference implements ShouldQueue
 
             $decoded_items = json_decode($res->getBody())->message;
 
+          // SET CORRECT ISSN
+            if(isset($decoded_items->{'issn-type'})){ $this->issn = collect($decoded_items->{'issn-type'})->where('type', 'print')->first();}
+            if(!isset($decoded_items->{'issn-type'}) && isset($decoded_items->ISSN)){$this->issn = $decoded_items->ISSN;};
+
             //check to see what ISSN is given, and exists in the database
-            $this->issn = collect($decoded_items->{'issn-type'})->where('type', 'print')->first();
-
-
             $journal = Journal::where('issn', $this->issn->value);
             if (!$journal->exists()) {
                 ProcessJournal::dispatch($this->issn->value)->onConnection('redis')->onQueue('journals');
@@ -66,5 +70,11 @@ class ProcessReference implements ShouldQueue
     {
         $this->filterUrl = 'https://api.crossref.org/works/:'.$this->doi.'?mailto='.HelperServiceProvider::getApiemail();
         return $this->filterUrl;
+    }
+
+    public function failed(Exception $exception)
+    {
+        $errormsg = "Failed Reference with DOI: " . $this->doi;
+        Log::error($errormsg);
     }
 }

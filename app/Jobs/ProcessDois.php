@@ -101,12 +101,15 @@ class ProcessDois implements ShouldQueue
             Event::fire('reference.started', $output);
 
             //cycle through the references and add them to output_reference
-            foreach ($decoded_items->reference as $reference) {
-                if (isset($reference->DOI)) {
-                    ProcessReference::dispatch($reference->DOI)->onConnection('redis')->onQueue('journals');
+           if(isset($decoded_items->reference)) {
 
-                }
-            }
+               foreach ($decoded_items->reference as $reference) {
+                   if (isset($reference->DOI)) {
+                       ProcessReference::dispatch($reference->DOI)->onConnection('redis')->onQueue('journals');
+
+                   }
+               }
+           }
 
             //Reference Event fire
             Event::fire('reference.ended', $output);

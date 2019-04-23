@@ -37,6 +37,8 @@ class StartSkynet extends Command
      */
     public function handle()
     {
+        $this->line('<fg=red>Clearing logs</>');
+        exec('rm ' . storage_path('logs/laravel*'));
         $this->line('<fg=red>Migrate and refreshing databases</>');
         sleep(1);
         $this->call('migrate:refresh');
@@ -51,4 +53,6 @@ class StartSkynet extends Command
         $this->call('journal:add', ['issn' => '0891-6640']);
         //
     }
+
+
 }

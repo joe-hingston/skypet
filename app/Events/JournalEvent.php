@@ -13,11 +13,7 @@ class JournalEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
+
     public function __construct()
 
     {
@@ -25,25 +21,13 @@ class JournalEvent
     }
 
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return Channel|array
-     */
-
     public function journalCreated(Journal $journal)
     {
 
-        Log::info("Journal Created with ID: ".$journal->id);
+        Log::info("------------------------- Journal Created with ID: ".$journal->id ."------------------------- ");
 
     }
 
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return Channel|array
-     */
 
     public function journalUpdated(Journal $journal)
     {
@@ -52,12 +36,6 @@ class JournalEvent
 
     }
 
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return Channel|array
-     */
 
     public function journalDeleted(Journal $journal)
     {
