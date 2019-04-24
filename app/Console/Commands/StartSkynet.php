@@ -46,11 +46,8 @@ class StartSkynet extends Command
         sleep(1);
         exec('redis-cli flushall');
         sleep(1);
-        $this->line('<fg=red>Starting Horizon</>');
-        $this->call('horizon');
-        sleep(1);
         $this->line('<fg=red>Adding test journal</>');
-        $this->call('journal:add', ['issn' => '0891-6640']);
+        $this->call('journal:add');
         //
     }
 

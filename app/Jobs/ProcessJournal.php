@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Journal;
+use App\Output;
 use App\Providers\HelperServiceProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -12,7 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Event;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 
 class ProcessJournal implements ShouldQueue
 {
@@ -125,9 +126,13 @@ class ProcessJournal implements ShouldQueue
 
             foreach ($decoded_items as $item) {
 
-                ProcessDois::withChain([
-                    new ProcessAbstract($item->DOI),
-                ])->dispatch($item->DOI, $this->journal);
+                //CHECK IF DOI ALREADY EXISTS AND ONLY ADD IF NEW
+                if (!Output::where('doi', '=', $item->DOI)->exists()) {
+                    ProcessDois::withChain([
+                        new ProcessAbstract($item->DOI),
+                    ])->dispatch($item->DOI, $this->journal);
+
+                }
 
                 $this->offset += $this->qty;
 

@@ -8,13 +8,14 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 use SimpleXMLElement;
 
 class ProcessEmptyAbstracts implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $tries = 1;
     /**
      * Create a new job instance.
      *

@@ -10,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 use SimpleXMLElement;
 use Illuminate\Support\Facades\Event;
 use Exception;
@@ -19,7 +19,7 @@ class ProcessAbstract implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $tries = 3;
+    public $tries = 1;
     public $timeout = 120;
     protected $doi;
     protected $err;

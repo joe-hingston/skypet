@@ -12,7 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Event;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 
 class ProcessDois implements ShouldQueue
 {
@@ -41,6 +41,8 @@ class ProcessDois implements ShouldQueue
     public $res;
 
     public $doi;
+
+    public $tries = 3;
 
     public function __construct($doi, Journal $journal)
     {

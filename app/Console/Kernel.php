@@ -5,6 +5,8 @@ namespace App\Console;
 use App\Jobs\ProcessEmptyAbstracts;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,7 +28,15 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
-        $schedule->job(new ProcessEmptyAbstracts())->everyFifteenMinutes();
+        $schedule->job(new ProcessEmptyAbstracts())->everyFifteenMinutes()->runInBackground()->withoutOverlapping()
+        ->before(function () {
+        Log::Alert('-------------------- ProcessEmptyAbstracts is starting --------------------------');
+            Redis::connection()->del('queues:abstracts');
+    })
+        ->after(function () {
+            Log::Alert('-------------------- ProcessEmptyAbstracts has ended --------------------------');
+        });
+
 }
 
     /**

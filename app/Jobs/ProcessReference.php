@@ -12,7 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 
 class ProcessReference implements ShouldQueue
 {
