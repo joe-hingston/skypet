@@ -2,15 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9fba513f-9c7f-4f66-a494-8399ac104a4f" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Console/Commands/StartSkynet.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Console/Commands/StartSkynet.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Console/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Console/Kernel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Jobs/ProcessAbstract.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Jobs/ProcessAbstract.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Jobs/ProcessDois.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Jobs/ProcessDois.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Jobs/ProcessEmptyAbstracts.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Jobs/ProcessEmptyAbstracts.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Jobs/ProcessJournal.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Jobs/ProcessJournal.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Jobs/ProcessReference.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Jobs/ProcessReference.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/queue.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/queue.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/horizon.log" beforeDir="false" afterPath="$PROJECT_DIR$/storage/horizon.log" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -60,31 +56,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Jobs/ProcessAbstract.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="6" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
-              <folding>
-                <element signature="e#28#43#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Jobs/ProcessEmptyAbstracts.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="23" lean-forward="true" selection-start-line="10" selection-start-column="23" selection-end-line="10" selection-end-column="23" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Jobs/ProcessDois.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="578">
-              <caret line="55" column="7" lean-forward="true" selection-start-line="55" selection-start-column="7" selection-end-line="55" selection-end-column="7" />
+              <caret line="55" column="7" selection-start-line="55" selection-start-column="7" selection-end-line="55" selection-end-column="7" />
               <folding>
                 <element signature="e#28#44#0#PHP" expanded="true" />
               </folding>
@@ -101,11 +76,32 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/storage/logs/laravel-2019-04-24.log">
           <provider selected="true" editor-type-id="LogFileEditorProvider">
-            <state relative-caret-position="20">
-              <caret line="710" column="56" selection-start-line="710" selection-start-column="41" selection-end-line="710" selection-end-column="56" />
+            <state relative-caret-position="-1884">
+              <caret line="4269" column="81" selection-start-line="4269" selection-start-column="81" selection-end-line="4269" selection-end-column="81" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="544">
+                <caret line="32" selection-start-line="32" selection-end-line="32" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/queue.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="759">
+              <caret line="64" column="26" selection-start-line="64" selection-start-column="26" selection-end-line="64" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -113,8 +109,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/storage/horizon.log">
           <provider selected="true" editor-type-id="LogFileEditorProvider">
-            <state relative-caret-position="204">
-              <caret line="39" column="63" lean-forward="true" selection-start-line="39" selection-start-column="63" selection-end-line="39" selection-end-column="63" />
+            <state relative-caret-position="-1377">
+              <caret line="39" column="63" selection-start-line="39" selection-start-column="63" selection-end-line="39" selection-end-column="63" />
             </state>
           </provider>
         </entry>
@@ -123,7 +119,7 @@
         <entry file="file://$PROJECT_DIR$/app/Jobs/ProcessJournal.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="901">
-              <caret line="129" column="57" selection-start-line="129" selection-start-column="57" selection-end-line="129" selection-end-column="57" />
+              <caret line="129" column="39" selection-start-line="129" selection-start-column="37" selection-end-line="129" selection-end-column="39" />
               <folding>
                 <element signature="e#28#44#0#PHP" expanded="true" />
               </folding>
@@ -183,7 +179,6 @@
       <list>
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/b47d5a25-e007-4161-b203-097d706897d4/console.sql" />
         <option value="$PROJECT_DIR$/.env" />
-        <option value="$PROJECT_DIR$/config/queue.php" />
         <option value="$PROJECT_DIR$/storage/logs/laravel-2019-03-05.log" />
         <option value="$PROJECT_DIR$/storage/logs/laravel-2019-03-06.log" />
         <option value="$PROJECT_DIR$/storage/logs/laravel-2019-03-07.log" />
@@ -225,6 +220,8 @@
         <option value="$PROJECT_DIR$/app/Jobs/ProcessReference.php" />
         <option value="$PROJECT_DIR$/app/Jobs/ProcessDois.php" />
         <option value="$PROJECT_DIR$/app/Jobs/ProcessJournal.php" />
+        <option value="$PROJECT_DIR$/config/queue.php" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -330,8 +327,8 @@
       <path value="$PROJECT_DIR$/vendor/barryvdh/laravel-debugbar" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="1701" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="612" />
     <option name="y" value="-8" />
     <option name="width" value="818" />
     <option name="height" value="538" />
@@ -353,26 +350,7 @@
             <path>
               <item name="skypet" type="b2602c69:ProjectViewProjectNode" />
               <item name="skypet" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="skypet" type="b2602c69:ProjectViewProjectNode" />
-              <item name="skypet" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Console" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="skypet" type="b2602c69:ProjectViewProjectNode" />
-              <item name="skypet" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Console" type="462c0819:PsiDirectoryNode" />
-              <item name="Commands" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="skypet" type="b2602c69:ProjectViewProjectNode" />
-              <item name="skypet" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Jobs" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="skypet" type="b2602c69:ProjectViewProjectNode" />
@@ -548,7 +526,7 @@
     </servers>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="155319000" />
+    <option name="totallyTimeSpent" value="156610000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -560,10 +538,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1432" y="-8" width="2576" height="1416" extended-state="6" />
+    <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49851924" visible="true" weight="0.15659778" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49851924" visible="true" weight="0.28223497" />
       <window_info id="Structure" order="1" sideWeight="0.50148076" side_tool="true" weight="0.16894531" />
       <window_info id="Favorites" order="2" sideWeight="0.50049067" side_tool="true" weight="0.16894531" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -635,7 +613,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/storage/logs/laravel-2019-03-21.log" />
     <entry file="file://$PROJECT_DIR$/storage/logs/laravel-2019-03-20.log" />
     <entry file="file://$PROJECT_DIR$/storage/logs/laravel-2019-03-30.log" />
     <entry file="file://$PROJECT_DIR$/storage/logs/laravel-2019-03-31.log" />
@@ -796,13 +773,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/queue.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="658">
-          <caret line="57" column="10" lean-forward="true" selection-start-line="57" selection-start-column="10" selection-end-line="57" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Requests/OutputValidation.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
@@ -854,7 +824,7 @@
     <entry file="file://$PROJECT_DIR$/app/Jobs/ProcessEmptyAbstracts.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
-          <caret line="10" column="23" lean-forward="true" selection-start-line="10" selection-start-column="23" selection-end-line="10" selection-end-column="23" />
+          <caret line="10" column="23" selection-start-line="10" selection-start-column="23" selection-end-line="10" selection-end-column="23" />
         </state>
       </provider>
     </entry>
@@ -871,38 +841,10 @@
     <entry file="file://$PROJECT_DIR$/app/Jobs/ProcessDois.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="578">
-          <caret line="55" column="7" lean-forward="true" selection-start-line="55" selection-start-column="7" selection-end-line="55" selection-end-column="7" />
+          <caret line="55" column="7" selection-start-line="55" selection-start-column="7" selection-end-line="55" selection-end-column="7" />
           <folding>
             <element signature="e#28#44#0#PHP" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Console/Kernel.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" selection-start-line="8" selection-end-line="8" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Console/Commands/StartSkynet.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="833">
-          <caret line="49" column="33" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="27" selection-start-line="27" selection-end-line="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/storage/horizon.log">
-      <provider selected="true" editor-type-id="LogFileEditorProvider">
-        <state relative-caret-position="204">
-          <caret line="39" column="63" lean-forward="true" selection-start-line="39" selection-start-column="63" selection-end-line="39" selection-end-column="63" />
         </state>
       </provider>
     </entry>
@@ -916,20 +858,65 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Console/Kernel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" selection-start-line="8" selection-end-line="8" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/queue.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="759">
+          <caret line="64" column="26" selection-start-line="64" selection-start-column="26" selection-end-line="64" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Console/Commands/StartSkynet.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="833">
+          <caret line="49" column="33" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Jobs/ProcessJournal.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="901">
-          <caret line="129" column="57" selection-start-line="129" selection-start-column="57" selection-end-line="129" selection-end-column="57" />
+          <caret line="129" column="39" selection-start-line="129" selection-start-column="37" selection-end-line="129" selection-end-column="39" />
           <folding>
             <element signature="e#28#44#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/storage/horizon.log">
+      <provider selected="true" editor-type-id="LogFileEditorProvider">
+        <state relative-caret-position="-1377">
+          <caret line="39" column="63" selection-start-line="39" selection-start-column="63" selection-end-line="39" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/storage/logs/laravel-2019-04-24.log">
       <provider selected="true" editor-type-id="LogFileEditorProvider">
-        <state relative-caret-position="20">
-          <caret line="710" column="56" selection-start-line="710" selection-start-column="41" selection-end-line="710" selection-end-column="56" />
+        <state relative-caret-position="-1884">
+          <caret line="4269" column="81" selection-start-line="4269" selection-start-column="81" selection-end-line="4269" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="544">
+            <caret line="32" selection-start-line="32" selection-end-line="32" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
