@@ -9,15 +9,16 @@
     "license": "MIT",
     "require": {
         "php": "^7.1.3",
+        "ext-curl": "*",
+        "ext-redis": "*",
+        "ext-simplexml": "*",
         "fideloper/proxy": "^4.0",
-        "laravel/framework": "5.7.*",
+        "hamburgscleanest/laravel-guzzle-throttle": "^4.0",
+        "laravel/framework": "5.8.*",
         "laravel/horizon": "^3.0",
         "laravel/telescope": "^2.0",
         "laravel/tinker": "^1.0",
-        "predis/predis": "^1.1",
-        "ext-simplexml": "*",
-        "ext-curl": "*",
-        "ext-redis": "*"
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",

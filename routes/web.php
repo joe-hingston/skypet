@@ -14,14 +14,19 @@ set_time_limit(0);
 */
 
 
+use App\Jobs\ProcessAbstract;
+use App\Jobs\ProcessDois;
 use App\Jobs\ProcessJournal;
 use App\Output;
+use App\Providers\HelperServiceProvider;
+use GuzzleHttp\Client;
+use hamburgscleanest\LaravelGuzzleThrottle\Facades\LaravelGuzzleThrottle;
 
 
 Route::get('journalseed', function () {
-    ProcessJournal::dispatch('0891-6640')->onConnection('redis')->onQueue('journals');
-});
 
+     ProcessJournal::dispatch('0891-6640');
+});
 
 
 Auth::routes();

@@ -5,15 +5,19 @@ namespace App\Jobs;
 use App\Journal;
 use App\Output;
 use App\Providers\HelperServiceProvider;
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use hamburgscleanest\LaravelGuzzleThrottle\Facades\LaravelGuzzleThrottle;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProcessJournal implements ShouldQueue
 {
@@ -25,19 +29,14 @@ class ProcessJournal implements ShouldQueue
      * @return void
      */
 
-    public $client;
 
-    public $apiUri;
 
-    public $filterUrl;
 
     public $total;
 
     public $qty = 200;
 
-    public $offset = 0;
-
-    public $issn;
+    public $offset = 100;
 
     public $records;
 
@@ -45,11 +44,24 @@ class ProcessJournal implements ShouldQueue
 
     public $journal;
 
+    public $cursor = '*';
+
+    public $filter = 'type:journal-article';
+
+    public $mailto = 'afletcher53@gmail.com';
+
+    public $rows = 1000;
+
+    protected $issn;
+
+
+
     public function __construct($issn)
     {
         $this->issn = $issn;
         $this->onQueue('journals');
         $this->onConnection('redis');
+
     }
 
     /**
@@ -60,48 +72,62 @@ class ProcessJournal implements ShouldQueue
     public function handle()
     {
 
-        Redis::throttle('key')->allow(1)->every(1)->then(function () {
 
-            $this->client = new Client();
-            try {
+        Redis::funnel('key')->limit(1)->then(function () {
 
-                $journalinfo = json_decode($this->client->get($this->getWorksUrl())->getBody());
-                $this->setTotal(json_decode($this->client->get($this->getWorksUrl())->getBody())->message->counts->{'total-dois'});
-                $journal = Journal::updateorCreate(['issn' => $this->issn], [
-                    'issn' => $this->issn,
-                    'total_articles' => $this->getTotal(),
-                    'title' => $journalinfo->message->title
-                ]);
+            $client = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
+            $res = $client->get($this->getJournalUrl());
+            $decoded_items = json_decode($res->getBody())->message;
 
-                //Fire off events for creation
-                if($journal->wasRecentlyCreated){Event::fire('reference.notnulljournal', $journal);} else {Event::fire('reference.referenceNullJournal', $journal);};
+            //Get the PRINT issn
+            if(isset($decoded_items->{'issn-type'})){ $this->issn = collect($decoded_items->{'issn-type'})->where('type', 'print')->first();}
+            if(!isset($decoded_items->{'issn-type'}) && isset($decoded_items->ISSN)){$this->issn = $decoded_items->ISSN;};
 
-                $this->journal = Journal::find($journal->id);
-                $this->fetchDoiList();
-            } catch (RequestException $e) {
-                return $e->getResponse()->getStatusCode();
+            $journal = Journal::updateorCreate(['issn' => $this->issn], [
+                'issn' => $this->issn->value,
+                'total_articles' => $this->getTotal(),
+                'title' => $decoded_items->title
+            ]);
+
+         //get the total journal articles
+            $doiclient = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
+            var_dump($this->getDOIUrl());
+            $res = $doiclient->get($this->getDOIUrl());
+            $decoded_items = json_decode($res->getBody())->message;
+            $this->setTotal($decoded_items->{'total-results'});
+
+            //If total articles are less that the row quantity, set to total articles, if not set to offset.
+            $this->rows = ($this->getTotal() < $this->offset ? $this->getTotal() : $this->offset);
+
+
+
+
+            while ($this->qty < $this->getTotal()) {
+
+                $itemclient = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
+
+                $res = $itemclient->get($this->getDOIUrl());
+                $decoded_items = json_decode($res->getBody())->message->items;
+
+                foreach ($decoded_items as $item) {
+                    Storage::append('DOIlist.text', $item->DOI);
+
+                }
+                $this->cursor = \GuzzleHttp\json_decode($res->getBody())->message->{'next-cursor'};
+                $this->qty += $this->rows;
             }
-        }, function () {
-            return $this->release(10);
 
+
+
+        }, function () {
+            // Could not obtain lock...
+
+            return $this->release(10);
         });
 
     }
 
-    public function getWorksUrl()
-    {
-        return 'https://api.crossref.org/journals/'.$this->issn.'works?mailto='.HelperServiceProvider::getApiemail();
-    }
 
-    public function buildFilterUrl()
-    {
-
-        $this->filterUrl = 'http://api.crossref.org/works?filter=issn:'.$this->issn.'?mailto='.HelperServiceProvider::getApiemail();
-        return $this->filterUrl . http_build_query([
-                'offset' => $this->offset,
-                'rows' => $this->qty
-            ]);
-    }
 
     public function getTotal()
     {
@@ -116,44 +142,37 @@ class ProcessJournal implements ShouldQueue
         $this->total = $total;
     }
 
-    public function fetchDoiList()
-    {
-
-        while ($this->offset < $this->getTotal()) {
-
-            $res = $this->client->get($this->buildFilterUrl());
-            $decoded_items = json_decode($res->getBody())->message->items;
-
-            foreach ($decoded_items as $item) {
-
-                //CHECK IF DOI ALREADY EXISTS AND ONLY ADD IF NEW
-                if (!Output::where('doi', '=', $item->DOI)->exists()) {
-                    ProcessDois::withChain([
-                        new ProcessAbstract($item->DOI),
-                    ])->dispatch($item->DOI, $this->journal);
-
-                }
-
-                $this->offset += $this->qty;
-
-        }
-        }
-    }
 
     /**
      * @return mixed
      */
-    public function getApiUri()
+    public function getDOIUrl()
     {
-        return $this->apiUri;
+        if (is_string($this->issn)) {
+
+            $DOIurl = "https://api.crossref.org/v1/journals/" . $this->issn. "/works?";
+            $fields = array(
+                'rows' => $this->rows,
+                'cursor' => $this->cursor,
+                'filter' => $this->filter,
+                'mailto' => $this->mailto,
+            );
+
+            return $DOIurl.http_build_query($fields);
+
+        }
+
+        return null;
     }
 
     /**
      * @param $url
      */
-    public function setApiUri($url)
+    public function getJournalUrl()
     {
-        $this->apiUri = $url;
+
+        return  'https://api.crossref.org/v1/journals/'.$this->issn;
+
     }
 
 }

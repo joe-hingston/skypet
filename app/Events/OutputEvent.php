@@ -27,47 +27,4 @@ class OutputEvent
     }
 
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return Channel|array
-     */
-
-    public function outputCreated(Output $output)
-
-    {
-
-        Log::info("Output Created with ID: ".$output->doi);
-
-    }
-
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return Channel|array
-     */
-
-    public function outputUpdated(Output $output)
-
-    {
-
-        Log::info("Output Updated with DOI: ".$output->doi);
-
-    }
-
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return Channel|array
-     */
-
-    public function outputDeleted(Output $output)
-
-    {
-
-        Log::info("Output Deletec with DOI: ".$output->doi);
-
-    }
 }

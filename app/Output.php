@@ -13,15 +13,6 @@ class Output extends Model
     {
         parent::boot();
 
-        static::updated(function ($output) {
-            Event::fire('output.updated', $output);
-        });
-        static::created(function ($output) {
-            Event::fire('output.created', $output);
-        });
-        static::deleted(function ($output) {
-            Event::fire('output.deleted', $output);
-        });
     }
 
 
