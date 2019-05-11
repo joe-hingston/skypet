@@ -15,7 +15,6 @@ class CreateJournalsTable extends Migration
     {
         Schema::create('journals', function (Blueprint $table) {
             $table->increments('id');
-
             $table->string('issn')->nullable();
             $table->string('eissn')->nullable();
               $table->string('publisher')->nullable();
