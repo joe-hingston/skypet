@@ -48,47 +48,49 @@ class JournalController extends Controller
     public function create(Request $request)
     {
 
-
-
-
         if (preg_match('/[1-9]\d{6}/', $request->issn)) {
-        $client = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
-        $res = $client->get($this->getJournalUrl($request->issn));
 
-        if($res->getStatusCode()==200){
-            ProcessJournal::dispatch($request->issn)->onConnection('redis')->onQueue('journals');
-            $decoded_items = json_decode($res->getBody())->message;
+            try {
+                $client = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
+                $res = $client->get($this->getJournalUrl($request->issn));
 
-
-            if(isset($decoded_items->{'issn-type'})){ $this->issn = collect($decoded_items->{'issn-type'})->where('type', 'print')->first();}
-            if(isset($decoded_items->{'issn-type'})){ $this->electronic_issn = collect($decoded_items->{'issn-type'})->where('type', 'electronic')->first();}
-            if(!isset($decoded_items->{'issn-type'}) && isset($decoded_items->ISSN)){$this->issn = $decoded_items->ISSN;};
+                if($res->getStatusCode()==200) {
+                    ProcessJournal::dispatch($request->issn)->onConnection('redis')->onQueue('journals');
+                    $decoded_items = json_decode($res->getBody())->message;
 
 
-
-            $response = [
-                'title' =>  $decoded_items->title,
-                'publisher' => $decoded_items->publisher,
-                'issn' => $this->issn->value,
-                'eissn' => $this->electronic_issn->value,
-                'totaldois' => $decoded_items->counts->{'total-dois'},
-
-            ];
-
-
-            return view('layouts.journal.create', $response);
-        } else {
-            abort(403 , 'Crossref cannot find issn (' . $request->issn . '), Error code = ' . $res->getStatusCode());
-        }
+                    if (isset($decoded_items->{'issn-type'})) {
+                        $this->issn = collect($decoded_items->{'issn-type'})->where('type', 'print')->first();
+                    }
+                    if (isset($decoded_items->{'issn-type'})) {
+                        $this->electronic_issn = collect($decoded_items->{'issn-type'})->where('type', 'electronic')->first();
+                    }
+                    if (!isset($decoded_items->{'issn-type'}) && isset($decoded_items->ISSN)) {
+                        $this->issn = $decoded_items->ISSN;
+                    };
 
 
+                    $response = [
+                        'title' => $decoded_items->title,
+                        'publisher' => $decoded_items->publisher,
+                        'issn' => $this->issn->value,
+                        'eissn' => $this->electronic_issn->value,
+                        'totaldois' => $decoded_items->counts->{'total-dois'},
+
+                    ];
+
+
+                    return view('layouts.journal.create', $response);
+                }// Validate the value...
+            } catch (\Exception $e) {
+                abort(403 , $e->getMessage());
+            }
 
         } elseif (!preg_match('/[1-9]\d{6}/', $request->issn))
         {
             //TODO cleaner error page
             abort(403 , 'Incorrect ISSN syntax Provided');
         }
-
 
     }
 
