@@ -18,7 +18,7 @@ class CreateJournalsTable extends Migration
 
             $table->string('issn')->nullable();
             $table->string('eissn')->nullable();
-            $table->string('created_date')->nullable();
+              $table->string('publisher')->nullable();
             $table->string('title')->nullable();
             $table->integer('total_articles')->nullable();
             $table->timestamps();

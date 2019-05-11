@@ -18,6 +18,8 @@ class ProcessDois implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+
+    //TODO Simplify to a class like JournalFetcher
     /**
      * Create a new job instance.
      *
@@ -84,9 +86,13 @@ class ProcessDois implements ShouldQueue
 
         if (isset($decoded_items->title)) { // Filter out the ones with no titles
 
+
+
             $fields = [
 
                 //TODO add in all available information scraped from CrossRef
+
+
                 'doi' => $decoded_items->DOI,
                 'reference_count' => $decoded_items->{'reference-count'},
                 'url' => $decoded_items->URL,
