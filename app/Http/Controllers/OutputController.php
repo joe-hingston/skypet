@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Journal;
+use App\OutputFetcher;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -23,9 +25,18 @@ class OutputController extends Controller
      * @return Response
      */
     public function create()
+{
+
+}
+
+    public function test()
     {
         //TODO add create method through here
-        //
+        $doi = "10.1111/jvim.12037";
+        $journal = Journal::find(1);
+        $output = new OutputFetcher($doi, $journal);
+        $output->fetch();
+
     }
 
     /**

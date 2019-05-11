@@ -27,7 +27,6 @@ class ProcessJournal implements ShouldQueue
      */
 
 
-
     public function __construct($issn)
     {
 
@@ -44,8 +43,6 @@ class ProcessJournal implements ShouldQueue
      */
     public function handle()
     {
-
-
         Redis::funnel('key')->limit(1)->then(function () {
 
            $this->fetcher->fetch();

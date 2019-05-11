@@ -6,37 +6,25 @@ namespace App;
 
 use App\Jobs\ProcessAbstract;
 use App\Jobs\ProcessReference;
+use App\Providers\HelperServiceProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use hamburgscleanest\LaravelGuzzleThrottle\Facades\LaravelGuzzleThrottle;
+use Illuminate\Support\Facades\Event;
 
 class OutputFetcher
 {
-    public $client;
 
-    public $apiUri;
 
-    public $total;
+    public $mailto = 'afletcher53@gmail.com';
+    protected $issn;
+    protected $electronic_issn;
 
-    public $qty = 1;
 
-    public $offset = 0;
-
-    public $issn;
-
-    public $records;
-
-    public $journalID;
-
-    public function __construct(Client $client, Journal $journal)
+    public function __construct($doi, Journal $journal)
     {
-        $this->client = $client;
         $this->journal = $journal;
-        $email = "?mailto=afletcher53@gmail.com";
-
-        $this->setApiUri('http://api.crossref.org/works?filter=issn:'. $journal->issn . $email);
-        $this->setTotal(
-            json_decode($this->client->request('GET', $this->buildURL())->getBody())->message->{'total-results'}
-        );
+        $this->doi = $doi;
     }
 
     /**
@@ -44,94 +32,74 @@ class OutputFetcher
      * @return array
      * @throws GuzzleException
      */
+
+
     public function fetch()
+
     {
-        while ($this->offset < $this->total) {
 
-            $res = $this->client->request('GET', $this->buildUrl());
+        $client = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
+        $res = $client->get($this->buildFilterUrl());
+        $decoded_items = json_decode($res->getBody())->message;
 
-            $decoded_items = json_decode($res->getBody())->message->items;
 
-            foreach ($decoded_items as $item) {
+        if (isset($decoded_items->title)) { // Filter out the ones with no titles
 
-                if (isset($item->title)) { // Filter out the ones with no titles
-
-                    $output  = $this->journal->outputs()->updateorCreate(['doi' => $item->DOI],
-                        [
-                            'doi'=> $item->DOI,
-                            'reference_count' => $item->{'reference-count'},
-                            'url'=>$item->URL,
-                            'title'=>$item->title[0],
-                            'issn'=>$item->ISSN[0],
-                            'publisher'=>$item->publisher,
-                            'language'=>$item->language,
-                            'is_referenced_by'=>$item->{'is-referenced-by-count'}
-                        ]);
-
-                    if (!isset($item->reference)) continue;
-                    foreach($item->reference as $reference){
-                        if (!isset($reference->DOI)) continue;
-                            $reference =  $output->outputreferences()->updateorCreate(['doi'=>$reference->DOI],
-                                ['doi'=>$reference->DOI]);
-
-                            //new output found so lets process it
-                        ProcessReference::dispatch($reference->DOI)->onConnection('redis');
-
-                          }
-                    //Post processing
-                    ProcessAbstract::dispatch($output, $item->DOI)->onConnection('redis'); //grab the abstract
-
-                }   
+            if (isset($decoded_items->{'issn-type'})) {
+                $this->issn = collect($decoded_items->{'issn-type'})->where('type', 'print')->first();
             }
+            if (isset($decoded_items->{'issn-type'})) {
+                $this->electronic_issn = collect($decoded_items->{'issn-type'})->where('type', 'electronic')->first();
+            }
+            if (!isset($decoded_items->{'issn-type'}) && isset($decoded_items->ISSN)) {
+                $this->issn = $decoded_items->ISSN;
+            };
 
-            $this->offset += $this->qty;
+
+
+            $fields = [
+
+                //TODO add in all available information scraped from CrossRef
+
+
+                'doi' => isset($decoded_items->DOI) ? $decoded_items->DOI : null,
+                'reference_count' => isset($decoded_items->{'reference-count'}) ? $decoded_items->{'reference-count'} : null,
+                'url' => isset($decoded_items->URL) ? $decoded_items->URL : null,
+                'publisher' => isset($decoded_items->publisher) ? $decoded_items->publisher: null,
+                'language' => isset($decoded_items->language) ? $decoded_items->language: null,
+                'is_referenced_by' => isset($decoded_items->{'is-referenced-by-count'})? $decoded_items->{'is-referenced-by-count'}: null,
+                'issn' => isset($this->issn->value) ? $this->issn->value: null,
+                'created' => isset($decoded_items->created->{'date-time'}) ? date("Y-m-d H:i:s", strtotime($decoded_items->created->{'date-time'})) : null,
+                'eissn' => isset($this->electronic_issn->value) ? $this->electronic_issn->value : null,
+                'page' => isset($decoded_items->page) ? $decoded_items->page : null,
+
+            ];
+
+
+
+            //Flatten array of titles
+            $fields['title'] = is_array($decoded_items->title) ? array_shift($decoded_items->title) : $decoded_items->title;
+            $fields['miningurl'] = is_array($decoded_items->link) ? array_shift($decoded_items->link)->URL : null;
+            $fields['license'] = is_array($decoded_items->license) ? array_shift($decoded_items->license)->URL : null;
+
+            //TODO Add in authors in a seperate relationship table?
+
+            $output = $this->journal->outputs()->updateorCreate(['doi' => $decoded_items->DOI], $fields);
+
+
+            //TODO search through the references
+
 
         }
+
+
     }
 
-    /**
-     * @return string
-     */
-    public function buildUrl()
+    public function buildFilterUrl()
     {
-
-        return $this->apiUri . http_build_query([
-            'offset' => $this->offset,
-            'rows' => $this->qty
-        ]);
+        $this->filterUrl = 'https://api.crossref.org/works/:'.$this->doi.'?mailto=' . $this->mailto;
+        return $this->filterUrl;
     }
-
-
-    /**
-     * @param $url
-     */
-    public function setApiUri($url)
-    {
-        $this->apiUri = $url;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getApiUri()
-    {
-        return $this->apiUri;
-    }
-
-    /**
-     * @param $total
-     */
-    public function setTotal($total)
-    {
-        $this->total = $total;
-    }
-
-
-    public function getTotal($total)
-    {
-        return $this->total;
-    }
-
 
 
 }

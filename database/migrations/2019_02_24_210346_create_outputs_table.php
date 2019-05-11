@@ -19,6 +19,7 @@ class CreateOutputsTable extends Migration
             $table->unsignedInteger('journal_id');
             $table->text('title')->nullable();
             $table->string('doi')->nullable();
+            $table->dateTimeTz('created')->nullable();
             $table->string('publisher')->nullable();
             $table->string('issn')->nullable();
             $table->string('eissn')->nullable();
@@ -27,6 +28,7 @@ class CreateOutputsTable extends Migration
             $table->integer('reference_count')->nullable();
             $table->string('page')->nullable();
             $table->string('url')->nullable();
+            $table->string('miningurl')->nullable();
             $table->binary('abstract')->nullable();
             $table->integer('is_referenced_by')->nullable();
             $table->foreign('journal_id')->references('id')->on('journals')->onDelete('cascade');

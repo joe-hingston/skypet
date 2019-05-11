@@ -59,10 +59,10 @@ class JournalFetcher
 
         $this->journal = Journal::updateorCreate(['issn' => $this->issn->value], [
 
-            'issn' => $this->issn->value,
-            'eissn' => $this->electronic_issn->value,
-                  'title' => $decoded_items->title,
-            'publisher' => $decoded_items->publisher,
+            'issn' => $this->issn->value ?: null,
+            'eissn' => $this->electronic_issn->value ?: null,
+            'title' => $decoded_items->title ?: null,
+            'publisher' => $decoded_items->publisher?: null,
 
         ]);
 
@@ -90,7 +90,6 @@ class JournalFetcher
             $decoded_items = json_decode($res->getBody())->message->items;
             foreach ($decoded_items as $item) {
                 ProcessDois::dispatch($item->DOI, $this->journal)->onConnection('redis')->onQueue('journals');
-
             }
             $this->cursor = \GuzzleHttp\json_decode($res->getBody())->message->{'next-cursor'};
             $this->qty += $this->rows;
