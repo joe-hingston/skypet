@@ -65,6 +65,13 @@ return [
             "timeout" => 0,
             'block_for' => null,
         ],
+        'redis-long-running' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => 'default_long',
+            'retry_after' => 12000, // Run for max 20 minutes
+            'block_for' => null,
+        ],
 
     ],
 

@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ProcessJournal;
-use App\Journal;
 use App\JournalFetcher;
-use Carbon\Carbon;
+use Exception;
 use hamburgscleanest\LaravelGuzzleThrottle\Facades\LaravelGuzzleThrottle;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -55,7 +54,7 @@ class JournalController extends Controller
                 $res = $client->get($this->getJournalUrl($request->issn));
 
                 if($res->getStatusCode()==200) {
-                    ProcessJournal::dispatch($request->issn)->onConnection('redis')->onQueue('journals');
+                    ProcessJournal::dispatch($request->issn)->onConnection('redis');
                     $decoded_items = json_decode($res->getBody())->message;
 
 
@@ -82,7 +81,7 @@ class JournalController extends Controller
 
                     return view('layouts.journal.create', $response);
                 }// Validate the value...
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 abort(403 , $e->getMessage());
             }
 

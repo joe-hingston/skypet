@@ -6,7 +6,7 @@
 return [
     'cache' => [
         // Name of the configured driver in the Laravel cache config file / Also needs to be set when "no-cache" is set! Because it's used for the internal timers
-        'driver'      => \env('CACHE_DRIVER'),
+        'driver' => env('CACHE_DRIVER'),
         // Cache strategy: no-cache, cache, force-cache
         'strategy'    => 'cache',
         // TTL in minutes
@@ -23,7 +23,17 @@ return [
                 // interval in seconds till the limit is reset
                 'request_interval' => 1
             ],
+        ],
+
+        'https://eutils.ncbi.nlm.nih.gov/' => [
+            [
+                // maximum number of requests in the given interval
+                'max_requests' => 10,
+                // interval in seconds till the limit is reset
+                'request_interval' => 1
+            ],
         ]
+
     ]
 ];
 

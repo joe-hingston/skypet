@@ -15,6 +15,7 @@ set_time_limit(0);
 
 
 Route::get('journal/create/{issn}', 'JournalController@create');
+Route::get('output/create/{doi}', 'OutputController@create');
 
 Route::get('/journal/test', 'JournalController@test');
 Route::get('/output/test', 'OutputController@test');

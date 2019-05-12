@@ -2,15 +2,13 @@
 
 namespace App\Jobs;
 
-use App\Journal;
 use App\JournalFetcher;
-use Carbon\Carbon;
-use hamburgscleanest\LaravelGuzzleThrottle\Facades\LaravelGuzzleThrottle;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 
@@ -30,7 +28,7 @@ class ProcessJournal implements ShouldQueue
     public function __construct($issn)
     {
 
-        $this->onQueue('journals');
+        $this->onQueue('default_long');
         $this->onConnection('redis');
         $this->fetcher =   new JournalFetcher($issn);
 
@@ -55,5 +53,10 @@ class ProcessJournal implements ShouldQueue
 
     }
 
+    public function failed($exception)
+    {
+        Log::alert('Journal has failed - Why?');
+        Log::critical($exception->getMessage());
+    }
 
 }

@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use Schema;
+use App\Observers\OutputObserver;
+use App\Output;
 use Illuminate\Support\ServiceProvider;
+use Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,5 +27,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+        Output::observe(OutputObserver::class);
     }
 }

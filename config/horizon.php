@@ -135,6 +135,14 @@ return [
                 'tries' => 3,
                 'timeout' => 1200,
             ],
+            'supervisor-long-running' => [
+                'connection' => 'redis-long-running',
+                'queue' => 'default_long',
+                'balance' => 'simple',
+                'processes' => 2,
+                'tries' => 0,
+                'timeout' => 9000 // Timeout after 15 minutes
+            ]
         ],
 
         'local' => [
@@ -146,6 +154,15 @@ return [
                 'tries' => 3,
                 'block_for' => 5,
             ],
+            'supervisor-long-running' => [
+                'connection' => 'redis-long-running',
+                'queue' => 'default_long',
+                'balance' => 'simple',
+                'processes' => 1,
+                'tries' => 1,
+                'timeout' => 0 // Timeout after 15 minutes
+            ]
         ],
+
     ],
 ];

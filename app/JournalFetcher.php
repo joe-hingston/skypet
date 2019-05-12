@@ -83,13 +83,15 @@ class JournalFetcher
         $this->rows = ($this->getTotal() < $this->offset ? $this->getTotal() : $this->offset);
 
 
+        //TODO - Ensure that loops through every results
+        
         while ($this->qty < $this->getTotal()) {
 
             $this->client = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
             $res = $this->client->get($this->getDOIUri($this->journal->issn));
             $decoded_items = json_decode($res->getBody())->message->items;
             foreach ($decoded_items as $item) {
-                ProcessDois::dispatch($item->DOI, $this->journal)->onConnection('redis')->onQueue('journals');
+                ProcessDois::dispatch($item->DOI, $this->journal);
             }
             $this->cursor = \GuzzleHttp\json_decode($res->getBody())->message->{'next-cursor'};
             $this->qty += $this->rows;

@@ -4,13 +4,9 @@
 namespace App;
 
 
-use App\Jobs\ProcessAbstract;
-use App\Jobs\ProcessReference;
-use App\Providers\HelperServiceProvider;
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use hamburgscleanest\LaravelGuzzleThrottle\Facades\LaravelGuzzleThrottle;
-use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Storage;
 
 class OutputFetcher
 {
@@ -39,7 +35,9 @@ class OutputFetcher
     {
 
         $client = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
+
         $res = $client->get($this->buildFilterUrl());
+        Storage::append('Fuzzle.log', $res->getStatusCode());
         $decoded_items = json_decode($res->getBody())->message;
 
 
@@ -70,8 +68,15 @@ class OutputFetcher
                 'is_referenced_by' => isset($decoded_items->{'is-referenced-by-count'})? $decoded_items->{'is-referenced-by-count'}: null,
                 'issn' => isset($this->issn->value) ? $this->issn->value: null,
                 'created' => isset($decoded_items->created->{'date-time'}) ? date("Y-m-d H:i:s", strtotime($decoded_items->created->{'date-time'})) : null,
+                'desposited' => isset($decoded_items->deposited->{'date-time'}) ? date("Y-m-d H:i:s", strtotime($decoded_items->deposited->{'date-time'})) : null,
                 'eissn' => isset($this->electronic_issn->value) ? $this->electronic_issn->value : null,
                 'page' => isset($decoded_items->page) ? $decoded_items->page : null,
+                'source' => isset($decoded_items->source) ? $decoded_items->source : null,
+                'prefix' => isset($decoded_items->prefix) ? $decoded_items->prefix : null,
+                'volume' => isset($decoded_items->volume) ? $decoded_items->volume : null,
+                'member' => isset($decoded_items->member) ? $decoded_items->member : null,
+                'score' => isset($decoded_items->score) ? $decoded_items->score : null,
+                'issue' => isset($decoded_items->issue) ? $decoded_items->issue : null,
 
             ];
 
@@ -81,6 +86,8 @@ class OutputFetcher
             $fields['title'] = is_array($decoded_items->title) ? array_shift($decoded_items->title) : $decoded_items->title;
             $fields['miningurl'] = is_array($decoded_items->link) ? array_shift($decoded_items->link)->URL : null;
             $fields['license'] = is_array($decoded_items->license) ? array_shift($decoded_items->license)->URL : null;
+            $fields['short-container-title'] = is_array($decoded_items->{'short-container-title'}) ? array_shift($decoded_items->{'short-container-title'}) : null;
+            $fields['container-title'] = is_array($decoded_items->{'container-title'}) ? array_shift($decoded_items->{'container-title'}) : null;
 
             //TODO Add in authors in a seperate relationship table?
 
@@ -92,6 +99,8 @@ class OutputFetcher
 
         }
 
+
+        return $output;
 
     }
 
