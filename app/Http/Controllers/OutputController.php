@@ -28,7 +28,7 @@ class OutputController extends Controller
     public function create(Request $request)
     {
         //TODO add create method through here
-        $doi = $request->doi;
+        $doi = '10.1111/j.1939-1676.2006.tb02821.x';
         $journal = Journal::find(1);
         $output = new OutputFetcher($doi, $journal);
         $output->fetch();

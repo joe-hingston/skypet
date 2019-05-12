@@ -84,7 +84,7 @@ class OutputFetcher
 
             //Flatten array of titles
             $fields['title'] = is_array($decoded_items->title) ? array_shift($decoded_items->title) : $decoded_items->title;
-            $fields['miningurl'] = is_array($decoded_items->link) ? array_shift($decoded_items->link)->URL : null;
+            if(isset($decoded_items->link)){$fields['miningurl'] = is_array($decoded_items->link) ? array_shift($decoded_items->link)->URL : null;}
             $fields['license'] = is_array($decoded_items->license) ? array_shift($decoded_items->license)->URL : null;
             $fields['short-container-title'] = is_array($decoded_items->{'short-container-title'}) ? array_shift($decoded_items->{'short-container-title'}) : null;
             $fields['container-title'] = is_array($decoded_items->{'container-title'}) ? array_shift($decoded_items->{'container-title'}) : null;
