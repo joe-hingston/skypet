@@ -5,4 +5,7 @@
     <li class="nav-item">
         <a class="nav-link" href="/horizon">Horizon</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/telescope">Telescope</a>
+    </li>
 </ul>

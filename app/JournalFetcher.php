@@ -6,13 +6,14 @@ namespace App;
 
 use App\Jobs\ProcessDois;
 use hamburgscleanest\LaravelGuzzleThrottle\Facades\LaravelGuzzleThrottle;
+use Illuminate\Support\Facades\Log;
 
 class JournalFetcher
 {
 
     public $total;
 
-    public $qty = 200;
+    public $startQty = 0;
 
     public $offset = 100;
 
@@ -31,6 +32,8 @@ class JournalFetcher
     public $rows = 1000;
 
     protected $issn;
+
+    protected $DOIurl;
 
 
     public function __construct($issn)
@@ -79,13 +82,15 @@ class JournalFetcher
 
 
 
-        //If total articles are less that the row quantity, set to total articles, if not set to offset.
-        $this->rows = ($this->getTotal() < $this->offset ? $this->getTotal() : $this->offset);
+
+     //   $this->rows = $this->getTotal() < $this->offset ? $this->getTotal() : $this->offset;
 
 
         //TODO - Ensure that loops through every results
 
-        while ($this->qty < $this->getTotal()) {
+        while ($this->startQty < $this->getTotal()) {
+
+            Log::alert('*********starting number' . $this->startQty);
 
             $this->client = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
             $res = $this->client->get($this->getDOIUri($this->journal->issn));
@@ -94,7 +99,8 @@ class JournalFetcher
                 ProcessDois::dispatch($item->DOI, $this->journal);
             }
             $this->cursor = \GuzzleHttp\json_decode($res->getBody())->message->{'next-cursor'};
-            $this->qty += $this->rows;
+            $this->startQty += $this->rows;
+            Log::alert($this->startQty . ' rows ' . $this->rows);
         }
     }
 
@@ -123,6 +129,7 @@ class JournalFetcher
             'rows' => $this->rows, 'cursor' => $this->cursor, 'filter' => $this->filter, 'mailto' => $this->mailto
         );
         $this->DOIurl = $this->DOIurl.http_build_query($fields);
+
 
         return $this->DOIurl;
     }
