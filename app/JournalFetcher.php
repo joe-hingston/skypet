@@ -84,7 +84,7 @@ class JournalFetcher
 
 
         //TODO - Ensure that loops through every results
-        
+
         while ($this->qty < $this->getTotal()) {
 
             $this->client = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
