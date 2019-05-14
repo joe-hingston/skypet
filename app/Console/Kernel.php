@@ -41,6 +41,7 @@ class Kernel extends ConsoleKernel
     {
         $this->load(__DIR__.'/Commands');
         Commands\AddJournal::class;
+        Commands\ReindexCommand::class;
         require base_path('routes/console.php');
     }
 }

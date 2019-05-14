@@ -18,8 +18,23 @@ Route::get('journal/create/{issn}', 'JournalController@create');
 Route::get('output/create/{doi}', 'OutputController@create');
 
 Route::get('/journal/test', 'JournalController@test');
-Route::get('/output/test', 'OutputController@test');
+
+Route::get('/output/all', 'OutputController@all');
 
 Auth::routes();
 
+Route::get('/output/search', function (\App\Outputs\OutputsRepository $repository) {
 
+    if (request('q')) {
+
+        //TODO SET LIMIT FOR SEARCHING
+        $limit = 200;
+        $articles = $repository->search(request('q'), $limit);
+    } else {
+        $articles = \App\Output::all();
+    }
+
+    return view('layouts.output.index', [
+        'Outputs' => $articles,
+    ]);
+});

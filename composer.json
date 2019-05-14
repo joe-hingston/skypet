@@ -12,6 +12,7 @@
         "ext-curl": "*",
         "ext-redis": "*",
         "ext-simplexml": "*",
+        "elasticsearch/elasticsearch": "^6.7",
         "fideloper/proxy": "^4.0",
         "hamburgscleanest/laravel-guzzle-throttle": "^4.0",
         "laravel/framework": "5.8.*",

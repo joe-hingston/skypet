@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\ProcessEmptyAbstracts;
 use App\Journal;
+use App\Output;
 use App\OutputFetcher;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -38,6 +39,15 @@ class OutputController extends Controller
     public function test()
     {
         ProcessEmptyAbstracts::dispatch();
+    }
+
+    public function all()
+    {
+
+        return view('layouts.output.index', [
+            'Outputs' => Output::all(),
+        ]);
+
     }
 
     /**

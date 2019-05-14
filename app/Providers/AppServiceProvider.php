@@ -2,10 +2,15 @@
 
 namespace App\Providers;
 
+
 use App\Observers\OutputObserver;
+use App\Outputs\OutputsRepository;
+use App\Outputs\EloquentOutputsRepository;
 use App\Output;
+use Elasticsearch\ClientBuilder;
 use Illuminate\Support\ServiceProvider;
 use Schema;
+use Elasticsearch\Client;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,7 +21,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(OutputsRepository::class, EloquentOutputsRepository::class);
+        $this->app->bind(Client::class, function () {
+            return ClientBuilder::create()
+                ->setHosts(config('services.search.hosts'))
+                ->build();
+        });
     }
 
     /**
