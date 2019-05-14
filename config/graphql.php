@@ -1,7 +1,7 @@
 <?php
 
 
-
+use App\GraphQL\Types\OutputType;
 
 return [
 

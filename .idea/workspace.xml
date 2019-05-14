@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9fba513f-9c7f-4f66-a494-8399ac104a4f" name="Default" comment="Ratelimiting">
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/skypet.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/skypet.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/GraphQL/Types/JournalType.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/GraphQL/Queries/OutputQuery.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/GraphQL/Queries/OutputQuery.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/GraphQL/Types/OutputType.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/GraphQL/Types/OutputType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/graphql.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/graphql.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,26 +40,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/graphql.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="84" column="14" selection-start-line="84" selection-start-column="14" selection-end-line="84" selection-end-column="14" />
+            <state relative-caret-position="470">
+              <caret line="113" column="6" selection-start-line="113" selection-start-column="6" selection-end-line="113" selection-end-column="6" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Console/Kernel.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="697">
-              <caret line="45" column="5" selection-start-line="45" selection-start-column="5" selection-end-line="45" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/config/backup.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="29" column="20" selection-start-line="29" selection-start-column="20" selection-end-line="29" selection-end-column="20" />
+            <state relative-caret-position="612">
+              <caret line="36" column="19" selection-start-line="36" selection-start-column="19" selection-end-line="36" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -67,32 +58,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/storage/logs/laravel-2019-05-14.log">
           <provider selected="true" editor-type-id="LogFileEditorProvider">
-            <state relative-caret-position="-285059">
+            <state relative-caret-position="153">
               <caret line="9" selection-start-line="9" selection-end-line="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Middleware/CheckAccess.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="24" column="1" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
-              <folding>
-                <element signature="e#39#51#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Kernel.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="440">
-              <caret line="41" column="28" selection-start-line="41" selection-start-column="28" selection-end-line="41" selection-end-column="28" />
-              <folding>
-                <element signature="e#28#65#0#PHP" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -107,22 +74,67 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
+        <entry file="file://$PROJECT_DIR$/app/GraphQL/Types/OutputType.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
+            <state relative-caret-position="1445">
+              <caret line="98" column="37" selection-start-line="98" selection-start-column="37" selection-end-line="98" selection-end-column="37" />
+              <folding>
+                <element signature="e#35#50#0#PHP" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/GraphQL/Types/OutputType.php">
+        <entry file="file://$PROJECT_DIR$/app/GraphQL/Types/JournalType.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="26" column="40" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
+            <state relative-caret-position="425">
+              <caret line="25" selection-start-line="25" selection-end-line="25" />
               <folding>
-                <element signature="e#35#50#0#PHP" expanded="true" />
+                <element signature="e#35#51#0#PHP" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/composer.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="23" column="30" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/GraphQL/Queries/OutputsQuery.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+              <folding>
+                <element signature="e#40#55#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/GraphQL/Queries/OutputQuery.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="714">
+              <caret line="42" column="18" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="18" />
+              <folding>
+                <element signature="e#41#56#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/database/migrations/2019_02_24_210346_create_outputs_table.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="18" selection-start-line="18" selection-end-line="43" />
             </state>
           </provider>
         </entry>
@@ -173,7 +185,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/database/migrations/2019_02_24_203049_create_journals_table.php" />
         <option value="$PROJECT_DIR$/database/factories/JournalFactory.php" />
         <option value="$PROJECT_DIR$/database/factories/OutputFactory.php" />
         <option value="$PROJECT_DIR$/database/seeds/JournalSeeder.php" />
@@ -215,15 +226,16 @@
         <option value="$PROJECT_DIR$/app/GraphQL/Queries/OutputQueries.php" />
         <option value="$PROJECT_DIR$/app/GraphQL/Queries/OutputQuery" />
         <option value="$PROJECT_DIR$/app/GraphQL/Queries/OutputsQuery.php" />
-        <option value="$PROJECT_DIR$/app/GraphQL/Queries/OutputQuery.php" />
-        <option value="$PROJECT_DIR$/app/GraphQL/Types/OutputType.php" />
         <option value="$PROJECT_DIR$/.env" />
-        <option value="$PROJECT_DIR$/config/graphql.php" />
         <option value="$PROJECT_DIR$/app/Http/Middleware/CheckAccess.php" />
         <option value="$PROJECT_DIR$/app/Http/Kernel.php" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/app/Console/Commands/BackupDatabase.php" />
         <option value="$PROJECT_DIR$/config/backup.php" />
+        <option value="$PROJECT_DIR$/config/graphql.php" />
+        <option value="$PROJECT_DIR$/app/GraphQL/Types/OutputType.php" />
+        <option value="$PROJECT_DIR$/app/GraphQL/Types/JournalType.php" />
+        <option value="$PROJECT_DIR$/app/GraphQL/Queries/OutputQuery.php" />
       </list>
     </option>
   </component>
@@ -359,6 +371,36 @@
             <path>
               <item name="skypet" type="b2602c69:ProjectViewProjectNode" />
               <item name="skypet" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="skypet" type="b2602c69:ProjectViewProjectNode" />
+              <item name="skypet" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="GraphQL" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="skypet" type="b2602c69:ProjectViewProjectNode" />
+              <item name="skypet" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="GraphQL" type="462c0819:PsiDirectoryNode" />
+              <item name="Queries" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="skypet" type="b2602c69:ProjectViewProjectNode" />
+              <item name="skypet" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="GraphQL" type="462c0819:PsiDirectoryNode" />
+              <item name="Types" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="skypet" type="b2602c69:ProjectViewProjectNode" />
+              <item name="skypet" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="skypet" type="b2602c69:ProjectViewProjectNode" />
+              <item name="skypet" type="462c0819:PsiDirectoryNode" />
               <item name="storage" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -381,6 +423,22 @@
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="backup-temp" type="462c0819:PsiDirectoryNode" />
               <item name="temp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="skypet" type="b2602c69:ProjectViewProjectNode" />
+              <item name="skypet" type="462c0819:PsiDirectoryNode" />
+              <item name="storage" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="backup-temp" type="462c0819:PsiDirectoryNode" />
+              <item name="temp" type="462c0819:PsiDirectoryNode" />
+              <item name="db-dumps" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="skypet" type="b2602c69:ProjectViewProjectNode" />
+              <item name="skypet" type="462c0819:PsiDirectoryNode" />
+              <item name="storage" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="Laravel" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -525,7 +583,8 @@
       <workItem from="1557264934471" duration="128000" />
       <workItem from="1557344580713" duration="12354000" />
       <workItem from="1557610141231" duration="28494000" />
-      <workItem from="1557750246474" duration="20986000" />
+      <workItem from="1557750246474" duration="21223000" />
+      <workItem from="1557865687330" duration="1506000" />
     </task>
     <task id="LOCAL-00011" summary="Added Telescope&#10;Added recursive inserting of references&#10;&#10;To do:&#10;&#10;- Speed up the redis queue - currently having multiple jobs per reference, should only be one job with 3 tries. &#10;&#10;- Add in throwing error if no issn-type given (i.e. with DOI 10.1016/B978-0-7020-2791-8.50006-X);&#10;&#10;- ChronJobs to update journals in the database">
       <created>1554054067025</created>
@@ -564,7 +623,7 @@
     </servers>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="254288000" />
+    <option name="totallyTimeSpent" value="256031000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -577,8 +636,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="2552" y="-8" width="2576" height="1416" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49851924" visible="true" weight="0.16176471" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49851924" visible="true" weight="0.16295707" />
       <window_info id="Structure" order="1" sideWeight="0.50148076" side_tool="true" weight="0.16894531" />
       <window_info id="Favorites" order="2" sideWeight="0.50049067" side_tool="true" weight="0.16894531" />
       <window_info id="npm" order="3" side_tool="true" />
@@ -631,38 +691,7 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Jobs/ProcessDois.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="43" column="37" selection-start-line="43" selection-start-column="37" selection-end-line="43" selection-end-column="37" />
-          <folding>
-            <element signature="e#28#44#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/storage/logs/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="1" lean-forward="true" selection-start-column="1" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/storage/logs/laravel-2019-05-12.log" />
-    <entry file="file://$PROJECT_DIR$/app/Jobs/ProcessJournal.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="14" column="6" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/storage/app/DOIlist.text">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/storage/app/DOIlist.text" />
     <entry file="file://$PROJECT_DIR$/app/Console/Commands/StartSkynet.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="782">
@@ -670,21 +699,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/storage/app/OutputDOI.log">
-      <provider selected="true" editor-type-id="LogFileEditorProvider">
-        <state relative-caret-position="104">
-          <caret line="367" column="31" selection-start-line="367" selection-start-column="31" selection-end-line="367" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/storage/app/JournalDOI.log">
-      <provider selected="true" editor-type-id="LogFileEditorProvider">
-        <state relative-caret-position="-11167" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/storage/app/Fuzzle.log">
-      <provider selected="true" editor-type-id="LogFileEditorProvider" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/storage/app/OutputDOI.log" />
+    <entry file="file://$PROJECT_DIR$/storage/app/JournalDOI.log" />
+    <entry file="file://$PROJECT_DIR$/storage/app/Fuzzle.log" />
     <entry file="file://$PROJECT_DIR$/app/JournalFetcher.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="149">
@@ -740,13 +757,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Outputs/OutputsRepository">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="10" selection-start-line="3" selection-start-column="10" selection-end-line="3" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Outputs/OutputsRepository" />
     <entry file="file://$PROJECT_DIR$/resources/views/layouts/app.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="725">
@@ -898,12 +909,118 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/GraphQL/Queries/OutputQuery">
+    <entry file="file://$PROJECT_DIR$/app/GraphQL/Queries/OutputQuery" />
+    <entry file="file://$PROJECT_DIR$/app/Console/Commands/BackupDatabase.php" />
+    <entry file="file://$PROJECT_DIR$/storage/app/backup-temp/temp/db-dumps/mysql-homestead.sql">
+      <provider selected="true" editor-type-id="LargeFileEditor">
+        <state relative-caret-position="-77315">
+          <caret line="20" column="59" selection-start-line="20" selection-start-column="50" selection-end-line="20" selection-end-column="59" />
+          <caret line="22" column="59" selection-start-line="22" selection-start-column="50" selection-end-line="22" selection-end-column="59" />
+          <caret line="23" column="56" selection-start-line="23" selection-start-column="50" selection-end-line="23" selection-end-column="56" />
+          <caret line="26" column="51" selection-start-line="26" selection-start-column="50" selection-end-line="26" selection-end-column="51" />
+          <caret line="27" column="59" selection-start-line="27" selection-start-column="50" selection-end-line="27" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Console/Kernel.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+        <state relative-caret-position="697">
+          <caret line="45" column="5" selection-start-line="45" selection-start-column="5" selection-end-line="45" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/storage/logs/laravel-2019-05-14.log">
+      <provider selected="true" editor-type-id="LogFileEditorProvider">
+        <state relative-caret-position="153">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Middleware/CheckAccess.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="24" column="1" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
           <folding>
-            <element signature="e#39#54#0#PHP" expanded="true" />
+            <element signature="e#39#51#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Kernel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="41" column="28" selection-start-line="41" selection-start-column="28" selection-end-line="41" selection-end-column="28" />
+          <folding>
+            <element signature="e#28#65#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" selection-start-line="9" selection-end-line="11" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/backup.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="36" column="19" selection-start-line="36" selection-start-column="19" selection-end-line="36" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_02_24_210346_create_outputs_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="18" selection-start-line="18" selection-end-line="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_05_164044_create_jobs_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="20" column="36" lean-forward="true" selection-start-line="20" selection-start-column="36" selection-end-line="22" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/composer.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="30" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/graphql.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="470">
+          <caret line="113" column="6" selection-start-line="113" selection-start-column="6" selection-end-line="113" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/GraphQL/Types/JournalType.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" selection-start-line="25" selection-end-line="25" />
+          <folding>
+            <element signature="e#35#51#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/GraphQL/Types/OutputType.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1445">
+          <caret line="98" column="37" selection-start-line="98" selection-start-column="37" selection-end-line="98" selection-end-column="37" />
+          <folding>
+            <element signature="e#35#50#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -920,104 +1037,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/GraphQL/Queries/OutputQuery.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="5" selection-start-column="5" selection-end-column="5" />
+        <state relative-caret-position="714">
+          <caret line="42" column="18" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="18" />
           <folding>
             <element signature="e#41#56#0#PHP" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/GraphQL/Types/OutputType.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="40" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
-          <folding>
-            <element signature="e#35#50#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Middleware/CheckAccess.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="1" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
-          <folding>
-            <element signature="e#39#51#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Kernel.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="41" column="28" selection-start-line="41" selection-start-column="28" selection-end-line="41" selection-end-column="28" />
-          <folding>
-            <element signature="e#28#65#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" selection-start-line="9" selection-end-line="11" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/storage/logs/laravel-2019-05-14.log">
-      <provider selected="true" editor-type-id="LogFileEditorProvider">
-        <state relative-caret-position="-285059">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Console/Commands/BackupDatabase.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" column="32" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
-          <folding>
-            <element signature="e#40#71#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/graphql.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="84" column="14" selection-start-line="84" selection-start-column="14" selection-end-line="84" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Console/Kernel.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="45" column="5" selection-start-line="45" selection-start-column="5" selection-end-line="45" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/storage/app/backup-temp/temp/db-dumps/mysql-homestead.sql">
-      <provider selected="true" editor-type-id="LargeFileEditor">
-        <state relative-caret-position="-77315">
-          <caret line="20" column="59" selection-start-line="20" selection-start-column="50" selection-end-line="20" selection-end-column="59" />
-          <caret line="22" column="59" selection-start-line="22" selection-start-column="50" selection-end-line="22" selection-end-column="59" />
-          <caret line="23" column="56" selection-start-line="23" selection-start-column="50" selection-end-line="23" selection-end-column="56" />
-          <caret line="26" column="51" selection-start-line="26" selection-start-column="50" selection-end-line="26" selection-end-column="51" />
-          <caret line="27" column="59" selection-start-line="27" selection-start-column="50" selection-end-line="27" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/backup.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="20" selection-start-line="29" selection-start-column="20" selection-end-line="29" selection-end-column="20" />
         </state>
       </provider>
     </entry>

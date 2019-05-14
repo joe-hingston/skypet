@@ -17802,3 +17802,5 @@ Horizon started successfully.
 [2019-05-14 17:44:30][8900] Processed:  App\Jobs\ProcessDois
 [2019-05-14 17:44:30][8901] Processing: App\Jobs\ProcessDois
 [2019-05-14 17:44:30][8901] Processed:  App\Jobs\ProcessDois
+[2019-05-14 20:56:32][8902] Processing: App\Jobs\ProcessJournal
+[2019-05-14 20:56:33][8902] Failed:     App\Jobs\ProcessJournal
