@@ -7,6 +7,7 @@ namespace App;
 use App\Jobs\ProcessDois;
 use hamburgscleanest\LaravelGuzzleThrottle\Facades\LaravelGuzzleThrottle;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class JournalFetcher
 {
@@ -96,6 +97,7 @@ class JournalFetcher
             $res = $this->client->get($this->getDOIUri($this->journal->issn));
             $decoded_items = json_decode($res->getBody())->message->items;
             foreach ($decoded_items as $item) {
+                Storage::append('JournalDOI.log', $item->DOI);
                 ProcessDois::dispatch($item->DOI, $this->journal);
             }
             $this->cursor = \GuzzleHttp\json_decode($res->getBody())->message->{'next-cursor'};

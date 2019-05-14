@@ -6,6 +6,7 @@ namespace App;
 
 use GuzzleHttp\Exception\GuzzleException;
 use hamburgscleanest\LaravelGuzzleThrottle\Facades\LaravelGuzzleThrottle;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class OutputFetcher
@@ -21,6 +22,7 @@ class OutputFetcher
     {
         $this->journal = $journal;
         $this->doi = $doi;
+        Storage::append('OutputDOI.log', $doi);
     }
 
     /**
@@ -35,10 +37,11 @@ class OutputFetcher
     {
 
         $client = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
-
         $res = $client->get($this->buildFilterUrl());
         Storage::append('Fuzzle.log', $res->getStatusCode());
         $decoded_items = json_decode($res->getBody())->message;
+
+
 
 
         if (isset($decoded_items->title)) { // Filter out the ones with no titles
@@ -85,7 +88,7 @@ class OutputFetcher
             //Flatten array of titles
             $fields['title'] = is_array($decoded_items->title) ? array_shift($decoded_items->title) : $decoded_items->title;
             if(isset($decoded_items->link)){$fields['miningurl'] = is_array($decoded_items->link) ? array_shift($decoded_items->link)->URL : null;}
-            $fields['license'] = is_array($decoded_items->license) ? array_shift($decoded_items->license)->URL : null;
+            if(isset($decoded_items->license)) {$fields['license'] = is_array($decoded_items->license) ? array_shift($decoded_items->license)->URL : null;}
             $fields['short-container-title'] = is_array($decoded_items->{'short-container-title'}) ? array_shift($decoded_items->{'short-container-title'}) : null;
             $fields['container-title'] = is_array($decoded_items->{'container-title'}) ? array_shift($decoded_items->{'container-title'}) : null;
 
