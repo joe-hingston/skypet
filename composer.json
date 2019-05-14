@@ -12,6 +12,7 @@
         "ext-curl": "*",
         "ext-redis": "*",
         "ext-simplexml": "*",
+        "auth0/auth0-php": "^5.4",
         "elasticsearch/elasticsearch": "^6.7",
         "fideloper/proxy": "^4.0",
         "hamburgscleanest/laravel-guzzle-throttle": "^4.0",
@@ -19,7 +20,8 @@
         "laravel/horizon": "^3.0",
         "laravel/telescope": "^2.0",
         "laravel/tinker": "^1.0",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+        "rebing/graphql-laravel": "^1.20"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",
