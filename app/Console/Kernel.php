@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\flushredisqueue;
 use App\Jobs\ProcessEmptyAbstracts;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -42,6 +43,7 @@ class Kernel extends ConsoleKernel
         $this->load(__DIR__.'/Commands');
         Commands\AddJournal::class;
         Commands\ReindexCommand::class;
+        flushredisqueue::class;
         require base_path('routes/console.php');
     }
 }

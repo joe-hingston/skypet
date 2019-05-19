@@ -31,18 +31,22 @@ class AbstractFetcher
             $xmlid = $xmlid->IdList->Id->__toString();
             $client = LaravelGuzzleThrottle::client(['base_uri' => 'https://eutils.ncbi.nlm.nih.gov/']);
             $res = $client->get($this->getOutputUrl($xmlid));
-            $xmlid = simplexml_load_string($res->getBody());
+            $abstracttext = simplexml_load_string($res->getBody());
 
-            if (isset($xmlid->PubmedArticle->MedlineCitation->Article->Abstract->AbstractText)) {
+            if (isset($abstracttext->PubmedArticle->MedlineCitation->Article->Abstract->AbstractText)) {
+
                 $stringpieces = [];
-                foreach ($xmlid->PubmedArticle->MedlineCitation->Article->Abstract->AbstractText as $text) {
+                foreach ($abstracttext->PubmedArticle->MedlineCitation->Article->Abstract->AbstractText as $text) {
                     $stringpieces[] = (string)$text;
                 }
                 $abstract = implode(' ', $stringpieces);
+          Output::where('doi', $this->doi)->update(['abstract' => $abstract]);
 
-                Output::where('doi', $this->doi)->update(['abstract' => $abstract]);
             } else {
-                die();
+                Log::alert('Error with processing abstract? No abstract on pubmed?');
+                Log::alert('Output ID ' . $this->output->id);
+                Log::alert('API Url ' . $this->getAPIUrl());
+                Log::alert('Output Url ' . $this->getOutputUrl($xmlid));
             }
 
         } catch (Exception $e) {
@@ -50,7 +54,7 @@ class AbstractFetcher
             Log::alert('Output ID ' . $this->output->id);
             Log::alert('Error Message' . $e->getMessage());
             Log::alert('API Url ' . $this->getAPIUrl());
-            Log::alert('Output Url ' . $this->getOutputUrl('test'));
+            Log::alert('Output Url ' . $this->getOutputUrl($xmlid));
         };
 
 

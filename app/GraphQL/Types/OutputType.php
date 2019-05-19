@@ -93,6 +93,7 @@ class OutputType extends GraphQLType
             ],
 
             //TODO change the fields so they don't contain dashes - Cannot use hyphens in GraphQL
+            //TODO load relationship also
 
         ];
 

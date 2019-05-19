@@ -28,7 +28,7 @@ return [
         'https://eutils.ncbi.nlm.nih.gov/' => [
             [
                 // maximum number of requests in the given interval
-                'max_requests' => 10,
+                'max_requests' => 8,
                 // interval in seconds till the limit is reset
                 'request_interval' => 1
             ],

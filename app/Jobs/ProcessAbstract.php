@@ -25,7 +25,7 @@ class ProcessAbstract implements ShouldQueue
      */
     public function __construct(Output $output)
     {
-        $this->onQueue('default_long');
+        $this->onQueue('abstract_long');
         $this->onConnection('redis');
         $this->output = $output;
     }

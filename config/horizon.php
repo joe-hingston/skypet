@@ -159,7 +159,15 @@ return [
                 'queue' => 'default_long',
                 'balance' => 'simple',
                 'processes' => 1,
-                'tries' => 1,
+                'tries' => 3,
+                'timeout' => 0 // Timeout after 15 minutes
+            ],
+            'abstract-long-running' => [
+                'connection' => 'redis-abstract-long-running',
+                'queue' => 'abstract_long',
+                'balance' => 'simple',
+                'processes' => 15,
+                'tries' => 3,
                 'timeout' => 0 // Timeout after 15 minutes
             ]
         ],

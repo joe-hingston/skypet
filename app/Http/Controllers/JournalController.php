@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ProcessJournal;
+use App\Journal;
 use App\JournalFetcher;
+use App\Output;
 use Exception;
 use hamburgscleanest\LaravelGuzzleThrottle\Facades\LaravelGuzzleThrottle;
 use Illuminate\Http\Request;
@@ -28,11 +30,18 @@ class JournalController extends Controller
     {
         //
     }
+    public function health(Request $request)
+    {
+
+        $journal = Journal::find($request->id);
+        $result = new JournalFetcher($journal->issn);
+        $result->health();
+    }
 
     public function test()
     {
 
-        $journal = new JournalFetcher('19391676');
+        $journal = new JournalFetcher('20427670');
         $status_code = $journal->checkStatusCode();
         if($status_code==200){
             $journal->fetch();
@@ -156,7 +165,9 @@ class JournalController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Journal::destroy($id);
+        Echo "Journal destroyed, you naughty boy :D";
+
     }
 
 

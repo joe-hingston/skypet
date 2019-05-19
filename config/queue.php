@@ -72,6 +72,13 @@ return [
             'retry_after' => 12000, // Run for max 20 minutes
             'block_for' => null,
         ],
+        'redis-abstract-long-running' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => 'abstract_long',
+            'retry_after' => 12000, // Run for max 20 minutes
+            'block_for' => null,
+        ],
 
     ],
 

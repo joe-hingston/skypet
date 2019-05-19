@@ -13,6 +13,7 @@ class EloquentOutputsRepository implements OutputsRepository
 {
     private $search;
 
+
     public function __construct(Client $client) {
         $this->search = $client;
     }
@@ -24,6 +25,17 @@ class EloquentOutputsRepository implements OutputsRepository
         return $this->buildCollection($items);
     }
 
+//    public function searchDOI(string $query = "", string $limit = ""): Collection
+//    {
+//        $items = $this->searchOnElasticsearchDOI($query, $limit);
+//
+//        return $this->buildCollection($items);
+//    }
+
+
+
+
+
     private function searchOnElasticsearch(string $query, string $limit): array
     {
         $instance = new Output;
@@ -34,7 +46,7 @@ class EloquentOutputsRepository implements OutputsRepository
             'body' => [
                 'query' => [
                     'multi_match' => [
-                        'fields' => ['title', 'abstract^12'],
+                        'fields' => ['title', 'abstract', 'doi'],
                         'query' => $query,
                     ],
                 ],
@@ -44,6 +56,28 @@ class EloquentOutputsRepository implements OutputsRepository
 
         return $items;
     }
+
+    private function searchOnElasticsearchDOI(string $query, string $limit): array
+    {
+        $instance = new Output;
+
+        $items = $this->search->search([
+            'index' => $instance->getSearchIndex(),
+            'type' => $instance->getSearchType(),
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'doi' => $query,
+                    ],
+                ],
+                'size' => $limit
+            ],
+        ]);
+
+        return $items;
+    }
+
+
 
     private function buildCollection(array $items): Collection
     {

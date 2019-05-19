@@ -17,6 +17,7 @@ class OutputObserver
     public function created(Output $output)
     {
         Log::alert('Output created : ' . $output->id);
+        ProcessAbstract::dispatch($output);
     }
 
     /**
@@ -27,7 +28,7 @@ class OutputObserver
      */
     public function updated(Output $output)
     {
-        //
+        Log::alert('Output Updated : ' . $output->id);
     }
 
     /**

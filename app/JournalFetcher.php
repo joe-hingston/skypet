@@ -6,8 +6,9 @@ namespace App;
 
 use App\Jobs\ProcessDois;
 use hamburgscleanest\LaravelGuzzleThrottle\Facades\LaravelGuzzleThrottle;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
+
 
 class JournalFetcher
 {
@@ -45,65 +46,79 @@ class JournalFetcher
 
     public function fetch()
     {
-        $client = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
-        $res = $client->get($this->getJournalUrl($this->issn));
-        $decoded_items = json_decode($res->getBody())->message;
+      try {
+          $client = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
 
-        //Get the PRINT issn
-        if (isset($decoded_items->{'issn-type'})) {
-            $this->issn = collect($decoded_items->{'issn-type'})->where('type', 'print')->first();
-        }
-        if (isset($decoded_items->{'issn-type'})) {
-            $this->electronic_issn = collect($decoded_items->{'issn-type'})->where('type', 'electronic')->first();
-        }
-        if (!isset($decoded_items->{'issn-type'}) && isset($decoded_items->ISSN)) {
-            $this->issn = $decoded_items->ISSN;
-        };
+          $res = $client->get($this->getJournalUrl($this->issn));
+          $decoded_items = json_decode($res->getBody())->message;
 
 
-        $this->journal = Journal::updateorCreate(['issn' => $this->issn->value], [
-
-            'issn' => $this->issn->value ?: null,
-            'eissn' => $this->electronic_issn->value ?: null,
-            'title' => $decoded_items->title ?: null,
-            'publisher' => $decoded_items->publisher?: null,
-
-        ]);
-
-
-        //get the total journal articles
-        $client = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
-        $res = $client->get($this->getDOIUri($this->issn->value));
-        $decoded_items = json_decode($res->getBody())->message;
-
-        //Set and save the Total journal articles.
-        $this->setTotal($decoded_items->{'total-results'});
-        $this->journal->total_articles = $this->getTotal();
-        $this->journal->save();
+          //Get the PRINT issn
+          if (isset($decoded_items->{'issn-type'})) {
+              $this->issn = collect($decoded_items->{'issn-type'})->where('type', 'print')->first();
+          }
+          if (isset($decoded_items->{'issn-type'})) {
+              $this->electronic_issn = collect($decoded_items->{'issn-type'})->where('type', 'electronic')->first();
+          }
+          if (!isset($decoded_items->{'issn-type'}) && isset($decoded_items->ISSN)) {
+              $this->issn = $decoded_items->ISSN;
+          };
 
 
+          $this->journal = Journal::updateorCreate(['issn' => $this->issn->value], [
+              'issn' => $this->issn->value ?: null,
+              'eissn' => $this->electronic_issn->value ?: null,
+              'title' => $decoded_items->title ?: null,
+              'publisher' => $decoded_items->publisher ?: null,
+
+          ]);
 
 
-     //   $this->rows = $this->getTotal() < $this->offset ? $this->getTotal() : $this->offset;
+          //get the total journal articles
+          $client = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
+          $res = $client->get($this->getDOIUri($this->issn->value));
+          $decoded_items = json_decode($res->getBody())->message;
+
+          //Set and save the Total journal articles.
+          $this->setTotal($decoded_items->{'total-results'});
+          $this->journal->total_articles = $this->getTotal();
+          $this->journal->save();
 
 
-        //TODO - Ensure that loops through every results
+          $doiCollection = new Collection();
+          Log::alert('Processing ' . $this->journal->title);
 
-        while ($this->startQty < $this->getTotal()) {
+          while ($this->startQty < $this->getTotal()) {
 
-            Log::alert('*********starting number' . $this->startQty);
+              $this->client = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
+              $res = $this->client->get($this->getDOIUri($this->journal->issn));
+              $decoded_items = json_decode($res->getBody())->message->items;
 
-            $this->client = LaravelGuzzleThrottle::client(['base_uri' => 'https://api.crossref.org']);
-            $res = $this->client->get($this->getDOIUri($this->journal->issn));
-            $decoded_items = json_decode($res->getBody())->message->items;
-            foreach ($decoded_items as $item) {
-                Storage::append('JournalDOI.log', $item->DOI);
-                ProcessDois::dispatch($item->DOI, $this->journal);
-            }
-            $this->cursor = \GuzzleHttp\json_decode($res->getBody())->message->{'next-cursor'};
-            $this->startQty += $this->rows;
-            Log::alert($this->startQty . ' rows ' . $this->rows);
-        }
+              foreach ($decoded_items as $item) {
+                  $doiCollection->push($item->DOI);
+              }
+
+              $this->cursor = \GuzzleHttp\json_decode($res->getBody())->message->{'next-cursor'};
+              $this->startQty += $this->rows;
+
+          }
+
+          foreach ($doiCollection as $doi) {
+              ProcessDois::dispatch($doi, $this->journal);
+          }
+
+          Log::alert('Completed processing of  ' . $this->journal->title);
+
+      } catch (\GuzzleHttp\Exception\RequestException $e) {
+          if ($e->hasResponse()) {
+              $message = $e->getResponse()->getBody();
+              return (string) $message;
+          }
+          else {
+              return $e->getMessage();
+          }
+      }
+
     }
 
     public function getTotal()
@@ -140,9 +155,17 @@ class JournalFetcher
     public function getJournalUrl($issn)
     {
         $this->journalurl = 'https://api.crossref.org/v1/journals/'.$issn;
-
-
         return $this->journalurl;
 
+    }
+
+    public function health(){
+
+        $journal = Journal::where('issn', $this->issn)->first();
+        $outputs = Output::where('journal_id', $journal->id)->get();
+        $outputsUnique = $outputs->unique('doi');
+        $outputsDupes = $outputs->diff($outputsUnique);
+
+        dd( 'Total Articles from Crossref ' .$this->getTotal(), 'Total Articles ' .  count($outputs),  'Total Unique Articles ' .count($outputsUnique),  'Total Duplicate Articles ' . count($outputsDupes));
     }
 }
