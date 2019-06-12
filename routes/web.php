@@ -15,7 +15,7 @@ set_time_limit(0);
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('/', 'HomeController@index');
 
 Route::get('journal/create/{issn}', 'JournalController@create');
 Route::get('journal/health/{id}', 'JournalController@health');
@@ -25,6 +25,8 @@ Route::get('output/create/{doi}', 'OutputController@create');
 Route::get('/journal/test', 'JournalController@test');
 
 Route::get('/output/all', 'OutputController@all');
+
+Route::get('/status', 'HomeController@status');
 Route::get('/abstract/test', function(){
 
     Output::where('abstract', null)->chunk(500, function($results) {

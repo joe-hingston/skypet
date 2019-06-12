@@ -7,6 +7,7 @@ namespace App;
 use App\Jobs\ProcessDois;
 use hamburgscleanest\LaravelGuzzleThrottle\Facades\LaravelGuzzleThrottle;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 
@@ -159,13 +160,4 @@ class JournalFetcher
 
     }
 
-    public function health(){
-
-        $journal = Journal::where('issn', $this->issn)->first();
-        $outputs = Output::where('journal_id', $journal->id)->get();
-        $outputsUnique = $outputs->unique('doi');
-        $outputsDupes = $outputs->diff($outputsUnique);
-
-        dd( 'Total Articles from Crossref ' .$this->getTotal(), 'Total Articles ' .  count($outputs),  'Total Unique Articles ' .count($outputsUnique),  'Total Duplicate Articles ' . count($outputsDupes));
-    }
 }

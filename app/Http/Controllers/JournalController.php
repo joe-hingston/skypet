@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\HealthFunctions;
 use App\Jobs\ProcessJournal;
 use App\Journal;
 use App\JournalFetcher;
@@ -34,14 +35,15 @@ class JournalController extends Controller
     {
 
         $journal = Journal::find($request->id);
-        $result = new JournalFetcher($journal->issn);
-        $result->health();
+
+
+        $request = new HealthFunctions($journal);
     }
 
     public function test()
     {
 
-        $journal = new JournalFetcher('20427670');
+        $journal = new JournalFetcher('cd co');
         $status_code = $journal->checkStatusCode();
         if($status_code==200){
             $journal->fetch();
