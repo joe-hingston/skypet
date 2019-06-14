@@ -51,6 +51,7 @@ class ProcessJournal implements ShouldQueue
             return $this->release(10);
         });
 
+        
     }
 
     public function failed($exception)

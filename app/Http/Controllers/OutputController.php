@@ -18,7 +18,9 @@ class OutputController extends Controller
      */
     public function index()
     {
-        //
+        return view('output.index', [
+            'Outputs' => Output::all(),
+        ]);
     }
 
     /**
@@ -44,9 +46,7 @@ class OutputController extends Controller
     public function all()
     {
 
-        return view('layouts.output.index', [
-            'Outputs' => Output::all(),
-        ]);
+
 
     }
 
@@ -60,6 +60,7 @@ class OutputController extends Controller
     {
         //
     }
+
 
     /**
      * Display the specified resource.
@@ -104,6 +105,16 @@ class OutputController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function abstractall(){
+        Output::where('abstract', null)->chunk(500, function($results) {
+            foreach($results as $result) {
+                \App\Jobs\ProcessAbstract::dispatch($result);
+            }
+
+
+        });
     }
 
 

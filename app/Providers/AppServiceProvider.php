@@ -3,11 +3,15 @@
 namespace App\Providers;
 
 
+use App\Journal;
+use App\Observers\JournalObserver;
 use App\Observers\OutputObserver;
 use App\Outputs\OutputsRepository;
 use App\Outputs\EloquentOutputsRepository;
 use App\Output;
+use App\User;
 use Elasticsearch\ClientBuilder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Schema;
 use Elasticsearch\Client;
@@ -38,5 +42,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Output::observe(OutputObserver::class);
+        Journal::observe(JournalObserver::class);
+
     }
 }

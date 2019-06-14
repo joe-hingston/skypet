@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\AuthPermissionCommand;
 use App\Console\Commands\flushredisqueue;
 use App\Jobs\ProcessEmptyAbstracts;
 use Illuminate\Console\Scheduling\Schedule;
@@ -44,6 +45,7 @@ class Kernel extends ConsoleKernel
         Commands\AddJournal::class;
         Commands\ReindexCommand::class;
         flushredisqueue::class;
+        AuthPermissionCommand::class;
         require base_path('routes/console.php');
     }
 }

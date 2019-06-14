@@ -2,11 +2,6 @@
 
 @section('content')
 
-
-
-
-
-
     <div class="container">
         <div class="input-group">
                    <input type="hidden" name="search_param" value="all" id="search_param">

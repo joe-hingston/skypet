@@ -177,6 +177,7 @@ return [
 
         Barryvdh\Debugbar\ServiceProvider::class,
         Rebing\GraphQL\GraphQLServiceProvider::class,
+        App\Http\View\Composers\ViewServiceProvider::class,
 
     ],
 

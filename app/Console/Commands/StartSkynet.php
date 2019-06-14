@@ -45,7 +45,7 @@ class StartSkynet extends Command
         $this->line('<fg=red>Flushing the redis queue</>');
         sleep(1);
         exec('redis-cli flushall');
-        //
+        $this->call('db:seed');//
     }
 
 

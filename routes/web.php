@@ -2,7 +2,9 @@
 
 
 use App\AbstractFetcher;
+use App\Journal;
 use App\Output;
+use App\User;
 
 set_time_limit(0);
 /*
@@ -15,29 +17,48 @@ set_time_limit(0);
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', 'HomeController@index');
-
-Route::get('journal/create/{issn}', 'JournalController@create');
-Route::get('journal/health/{id}', 'JournalController@health');
-Route::get('journal/destroy/{id}', 'JournalController@destroy');
-Route::get('output/create/{doi}', 'OutputController@create');
-
-Route::get('/journal/test', 'JournalController@test');
-
-Route::get('/output/all', 'OutputController@all');
-
-Route::get('/status', 'HomeController@status');
-Route::get('/abstract/test', function(){
-
-    Output::where('abstract', null)->chunk(500, function($results) {
-        foreach($results as $result) {
-            \App\Jobs\ProcessAbstract::dispatch($result);
-        }
 
 
-    });
+Route::get('/test',function(){
+    $journal = \App\Journal::first();
+    $journal->notify(new \App\Notifications\JournalAdded($journal));
+});
+Route::get('/testget',function(){
+    $user = \App\User::find(1);
+    foreach ($user->notifications as $notification) {
+        echo $notification->type;
+    }
+});
+
+
+
+
+Route::group([ 'middleware' => ['role:Admin']], function() {
+    Route::post('journal/create/{issn}', 'JournalController@create');
+    Route::get('journal/destroy/{id}', 'JournalController@destroy');
+    Route::post('journals/store/{id}', 'JournalController@store');
+    Route::get('journal/health/{id}', 'JournalController@health');
+    Route::get('/abstract/all', 'OutputController@abstractsall');
+    Route::get('output/create/{doi}', 'OutputController@create');
+    Route::resource('users', 'UserController');
+    Route::resource('roles', 'RoleController');
+    Route::resource('posts', 'PostController');
+    Route::resource('healths', 'HealthController');
+});
+
+Route::group([ 'middleware' => 'auth' ], function () {
+    // ...
+    Route::get('/notifications', 'UserController@notifications');
+
+    Route::get('/home', 'HomeController@index');
 
 });
+
+Route::resource('outputs', 'OutputController');
+Route::resource('journals', 'JournalController');
+Route::get('journals/{id}', 'JournalController@show');
+Route::get('/', 'HomeController@index');
+
 
 Auth::routes();
 
