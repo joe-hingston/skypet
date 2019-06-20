@@ -10,7 +10,7 @@
             <li class="list-group-item">Publisher: {{$publisher}}</li>
             <li class="list-group-item">Print ISSN: {{$issn}}</li>
             <li class="list-group-item">Electronic ISSN: {{$eissn}}</li>
-            <li class="list-group-item">Total Dois: {{$totaldois}}</li>
+            <li class="list-group-item">Total Dois: {{$total_articles}}</li>
           </ul>
 
 

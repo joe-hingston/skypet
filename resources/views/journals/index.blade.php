@@ -24,19 +24,16 @@
         <div class="container">
         <div class="panel panel-primary">
             <div class="panel-heading">Articles <small> ({{ $Journals->count() }}) </small></div>
-
-
-            <div class="row" id="journallist">
-
-
-                    @forelse ($Journals as $Journal)
-                    <div class=""> <a href="journals/{{$Journal->id}}"><h2>{{ $Journal->title }}</h2> </a></div>
+            @forelse ($Journals as $Journal)
+                <div class="row" id="journallist">
+                    <a href="journals/{{$Journal->id}}">
+                        <h2>{{ $Journal->title }}</h2>
+                    </a>
                     @empty
                         <p>No articles found</p>
-                    @endforelse
-
-            </div>
-            </div>
+            @endforelse
+                </div>
+        </div>
         </div>
 
 

@@ -65,14 +65,13 @@ class JournalFetcher
               $this->issn = $decoded_items->ISSN;
           };
 
-          Log::error($decoded_items);
 
           $this->journal = Journal::updateorCreate(['issn' => $this->issn->value], [
               'title' => $decoded_items->title,
               'publisher' => $decoded_items->publisher,
               'issn' => isset($this->issn->value) ? $this->issn->value : null,
               'eissn' => isset($this->electronic_issn->value) ? $this->electronic_issn->value : null,
-              'totaldois' => $decoded_items->counts->{'total-dois'},
+              'total_articles' => $decoded_items->counts->{'total-dois'},
           ]);
 
 

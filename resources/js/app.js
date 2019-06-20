@@ -5,8 +5,6 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
-
 window.Vue = require('vue');
 
 /**
@@ -20,75 +18,20 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import routes from './routes';
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+
+Vue.use(VueRouter);
+
 
 const app = new Vue({
-    el: '#app'
-});
-window._ = require('lodash');
-window.$ = window.jQuery = require('jquery');
-require('bootstrap-sass');
+    el: '#app',
 
-var notifications = [];
+    router:new VueRouter(routes),
 
-const NOTIFICATION_TYPES = {
-    follow: 'App\\Notifications\\JournalAdded'
-};
 
-$(document).ready(function() {
-    // check if there's a logged in user
-    if(Laravel.userId) {
-        $.get('/notifications', function (data) {
-            addNotifications(data, "#notifications");
-        });
-    }
+
 });
 
-function addNotifications(newNotifications, target) {
-    notifications = _.concat(notifications, newNotifications);
-    // show only last 5 notifications
-    notifications.slice(0, 5);
-    showNotifications(notifications, target);
-}
-function showNotifications(notifications, target) {
-    if(notifications.length) {
-        var htmlElements = notifications.map(function (notification) {
-            return makeNotification(notification);
-        });
-        $(target + 'Menu').html(htmlElements.join(''));
-        $(target).addClass('has-notifications')
-    } else {
-        $(target + 'Menu').html('<li class="dropdown-header">No notifications</li>');
-        $(target).removeClass('has-notifications');
-    }
-}
-function makeNotification(notification) {
-    var to = routeNotification(notification);
-    var notificationText = makeNotificationText(notification);
-    return '<li><a href="' + to + '">' + notificationText + '</a></li>';
-}
-
-// get the notification route based on it's type
-function routeNotification(notification) {
-    var to = '?read=' + notification.id;
-    if(notification.type === NOTIFICATION_TYPES.follow) {
-        to = 'users' + to;
-    }
-    return '/' + to;
-}
-
-// get the notification text based on it's type
-function makeNotificationText(notification) {
-    var text = '';
-    if(notification.type === NOTIFICATION_TYPES.follow) {
-        const name = notification.data.follower_name;
-        text += '<strong>' + name + '</strong> followed you';
-    }
-    return text;
-}

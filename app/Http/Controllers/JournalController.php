@@ -145,7 +145,7 @@ class JournalController extends Controller
                         'publisher' => $decoded_items->publisher,
                         'issn' => isset($this->issn->value) ? $this->issn->value : null,
                         'eissn' => isset($this->electronic_issn->value) ? $this->electronic_issn->value : null,
-                        'totaldois' => $decoded_items->counts->{'total-dois'},
+                        'total_articles' => $decoded_items->counts->{'total-dois'},
 
                     ];
 
