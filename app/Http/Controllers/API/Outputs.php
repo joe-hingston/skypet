@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 
 class Outputs extends Controller
 {
@@ -15,12 +16,20 @@ class Outputs extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(\App\Outputs\OutputsRepository $repository, Request $request)
     {
 
-        $outputs = DB::table('outputs')->select('title','id', 'journal_id')->take(100)->get();
 
-        return response($outputs, Response::HTTP_OK);
+        //todo Ensure that sets the pagesize etc from url parameter, also check loadtimes
+
+        $size = isset($resquest->size) ? Input::get('size') : 100;
+        $start = isset($resquest->start) ? Input::get('start') : 0;
+        $articles['outputs'] = $repository->all($size, $start);
+        $articles['pagesize'] = count($articles['outputs']);
+        $articles['total-count'] = Output::count();
+        $articles['pages'] = Output::count()/$articles['pagesize'];
+        return response()->json($articles);
+
     }
 
 

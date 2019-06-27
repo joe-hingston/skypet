@@ -6,7 +6,7 @@ namespace App\Outputs;
 use App\Output;
 use Elasticsearch\Client;
 use Illuminate\Database\Eloquent\Collection;
-
+use phpDocumentor\Reflection\Types\Integer;
 
 
 class EloquentOutputsRepository implements OutputsRepository
@@ -18,25 +18,42 @@ class EloquentOutputsRepository implements OutputsRepository
         $this->search = $client;
     }
 
-    public function search(string $query = "", string $limit = ""): Collection
+    public function search(string $query = ""): Collection
     {
-        $items = $this->searchOnElasticsearch($query, $limit);
+        $items = $this->searchOnElasticsearch($query);
 
         return $this->buildCollection($items);
     }
 
-//    public function searchDOI(string $query = "", string $limit = ""): Collection
-//    {
-//        $items = $this->searchOnElasticsearchDOI($query, $limit);
-//
-//        return $this->buildCollection($items);
-//    }
+    public function all($size, $start): Collection
+    {
 
 
+        $items = $this->returnallElasticsearch($size, $start);
+
+        return $this->buildCollection($items);
+    }
+
+    private function returnallElasticsearch($size, $start): array
+    {
 
 
+        $instance = new Output;
 
-    private function searchOnElasticsearch(string $query, string $limit): array
+        $items = $this->search->search([
+            'index' => $instance->getSearchIndex(),
+            'type' => $instance->getSearchType(),
+            'body' => [
+                'from' => $start,
+                'size' =>$size,
+                ],
+        ]);
+
+        return $items;
+    }
+
+
+    private function searchOnElasticsearch(string $query): array
     {
         $instance = new Output;
 
@@ -50,27 +67,6 @@ class EloquentOutputsRepository implements OutputsRepository
                         'query' => $query,
                     ],
                 ],
-                'size' => $limit
-            ],
-        ]);
-
-        return $items;
-    }
-
-    private function searchOnElasticsearchDOI(string $query, string $limit): array
-    {
-        $instance = new Output;
-
-        $items = $this->search->search([
-            'index' => $instance->getSearchIndex(),
-            'type' => $instance->getSearchType(),
-            'body' => [
-                'query' => [
-                    'match' => [
-                        'doi' => $query,
-                    ],
-                ],
-                'size' => $limit
             ],
         ]);
 

@@ -48,4 +48,5 @@ class Kernel extends ConsoleKernel
         AuthPermissionCommand::class;
         require base_path('routes/console.php');
     }
+
 }

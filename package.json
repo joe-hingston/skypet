@@ -28,6 +28,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "axios-debug-log": "^0.6.1",
         "axios-progress-bar": "^1.2.0",
         "bootstrap-sass": "^3.4.1",
         "laravel-echo": "^1.5.3",

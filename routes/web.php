@@ -1,10 +1,7 @@
 <?php
 
 
-use App\AbstractFetcher;
-use App\Journal;
-use App\Output;
-use App\User;
+use GuzzleHttp\Client;
 
 set_time_limit(0);
 /*
@@ -18,17 +15,14 @@ set_time_limit(0);
 |
 */
 
-Route::get('/{any?}', function(){
-    return view ('app');
-
-})->where('any', '.*');
-
+//Route::get('/{any?}', function(){
+//    return view ('app');
+//
+//})->where('any', '.*');
+//
+//
 
 //
-//Route::get('/test',function(){
-//    $journal = \App\Journal::first();
-//    $journal->notify(new \App\Notifications\JournalAdded($journal));
-//});
 //Route::get('/testget',function(){
 //    $user = \App\User::find(1);
 //    foreach ($user->notifications as $notification) {
@@ -70,8 +64,8 @@ Route::get('/{any?}', function(){
 //    $journal = new \App\JournalFetcher($this->issn);
 //    $journal->fetch();
 //});
-
-
+//
+//
 //
 //Auth::routes();
 //
@@ -95,7 +89,7 @@ Route::get('/{any?}', function(){
 //        $articles = \App\Output::all();
 //    }
 //
-//    return view('layouts.output.index', [
+//    return view('output.index', [
 //        'Outputs' => $articles,
 //    ]);
 //});

@@ -13,6 +13,7 @@
         "ext-redis": "*",
         "ext-simplexml": "*",
         "auth0/auth0-php": "^5.4",
+        "barryvdh/laravel-cors": "^0.11.3",
         "elasticsearch/elasticsearch": "^6.7",
         "fideloper/proxy": "^4.0",
         "hamburgscleanest/laravel-guzzle-throttle": "^4.0",

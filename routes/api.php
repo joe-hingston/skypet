@@ -17,6 +17,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('/output', 'API\outputs', [
-    'except' => ['edit', 'show', 'store']
-]);
+Route::group(['middleware' => \Barryvdh\Cors\HandleCors::class], function() {
+    Route::resource('/output', 'API\outputs', [
+        'except' => ['edit', 'show', 'store']
+    ]);
+});
+
+
+Route::get('/ouputs', 'API\Outputs@index')->name('outputs.all');
