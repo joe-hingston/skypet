@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laracasts Assets</title>
+    <title>SkyPet</title>
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
-</head>
+</head>z
 <body class="font-sans">
 
 <div id="app">
@@ -51,6 +51,9 @@
                             </li>
                             <li class="text-lg py-3 leading-loose">
                                 <router-link class="text-black" to="/computed">Computed</router-link>
+                            </li>
+                            <li class="text-lg py-3 leading-loose">
+                                <router-link class="text-black" to="/test">Paignation Test</router-link>
                             </li>
                         </ul>
                     </section>

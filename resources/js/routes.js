@@ -6,6 +6,7 @@ import MachineLearning from './components/MachineLearning';
 import Outputs from './components/Outputs';
 import WhatWeDo from './components/WhatWeDo';
 import NotFound from './components/NotFound';
+import Test from './components/Test';
 
 const LoadersAndAnimations = () =>
     import(/* webpackChunkName: "loaders-and-animations.bundle" */ './components/LoadersAndAnimations');
@@ -60,6 +61,11 @@ export default {
             path: '/whatwedo',
             component: WhatWeDo,
             name: 'whatwedo'
+        },
+        {
+            path: '/test',
+            component: Test,
+            name: 'test'
         }
     ]
 

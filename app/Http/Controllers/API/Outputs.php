@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\OutputFilters;
 use App\Output;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
 
 class Outputs extends Controller
 {
@@ -16,22 +14,17 @@ class Outputs extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(\App\Outputs\OutputsRepository $repository, Request $request)
+    public function index(OutputFilters $filters, Request $request)
     {
 
+       if ($request->has('rowsPerPage')) {
+           return Output::filter($filters)->with('journal')->paginate($request['rowsPerPage']);
+       }
 
-        //todo Ensure that sets the pagesize etc from url parameter, also check loadtimes
-
-        $size = isset($resquest->size) ? Input::get('size') : 100;
-        $start = isset($resquest->start) ? Input::get('start') : 0;
-        $articles['outputs'] = $repository->all($size, $start);
-        $articles['pagesize'] = count($articles['outputs']);
-        $articles['total-count'] = Output::count();
-        $articles['pages'] = Output::count()/$articles['pagesize'];
-        return response()->json($articles);
-
+       else {
+           return Output::filter($filters)->with('journal')->paginate();
+       }
     }
-
 
 
     /**

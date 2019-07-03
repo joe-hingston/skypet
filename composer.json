@@ -18,6 +18,7 @@
         "fideloper/proxy": "^4.0",
         "hamburgscleanest/laravel-guzzle-throttle": "^4.0",
         "laracasts/flash": "^3.0",
+        "laravel-enso/vuedatatable": "^2.0",
         "laravel/framework": "5.8.*",
         "laravel/horizon": "^3.0",
         "laravel/telescope": "^2.0",

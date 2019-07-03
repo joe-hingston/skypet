@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Requests\QueryFilter;
 use App\Search\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,4 +24,9 @@ class Output extends Model
         return $this->belongsTo(Journal::class);
     }
 
+
+    public function scopeFilter($query,QueryFilter $filters)
+    {
+        return $filters->apply($query);
+    }
 }

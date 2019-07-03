@@ -24,4 +24,4 @@ Route::group(['middleware' => \Barryvdh\Cors\HandleCors::class], function() {
 });
 
 
-Route::get('/ouputs', 'API\Outputs@index')->name('outputs.all');
+Route::resource('outputs', 'API\Outputs');

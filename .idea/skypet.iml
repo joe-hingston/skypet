@@ -8,6 +8,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/auth0/auth0-php" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/barryvdh/laravel-cors" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/barryvdh/laravel-debugbar" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/box/spout" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/cakephp/chronos" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/elasticsearch/elasticsearch" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/firebase/php-jwt" />
@@ -19,6 +20,8 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/hamburgscleanest/guzzle-advanced-throttle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/hamburgscleanest/laravel-guzzle-throttle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laracasts/flash" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/laravel-enso/helpers" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/laravel-enso/vuedatatable" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/horizon" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/telescope" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laravelcollective/html" />

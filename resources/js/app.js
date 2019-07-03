@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -21,16 +20,21 @@ window.Vue = require('vue');
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import routes from './routes';
+import VueResource from 'vue-resource';
+import { TableComponent, TableColumn } from 'vue-table-component';
+import Vuetify from 'vuetify'
 
+Vue.component('table-component', TableComponent);
+Vue.component('table-column', TableColumn);
 
+Vue.use(VueResource);
 Vue.use(VueRouter);
+Vue.use(Vuetify);
 
 
 const app = new Vue({
     el: '#app',
-
-    router:new VueRouter(routes),
-
+    router: new VueRouter(routes),
 
 
 });

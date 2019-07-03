@@ -25,18 +25,26 @@
         "sass-loader": "^7.1.0",
         "tailwindcss": "^1.0.4",
         "vue": "^2.5.17",
-        "vue-template-compiler": "^2.6.10"
+        "vue-template-compiler": "^2.6.10",
+        "vuejs-paginator-axios": "^2.0.1"
     },
     "dependencies": {
         "axios-debug-log": "^0.6.1",
         "axios-progress-bar": "^1.2.0",
         "bootstrap-sass": "^3.4.1",
         "laravel-echo": "^1.5.3",
+        "laravel-vue-pagination": "^2.3.0",
         "lottie-web": "^5.5.5",
+        "moment": "^2.10.6",
         "nprogress": "^0.2.0",
         "pusher-js": "^4.4.0",
         "tailwindcss-typography": "^2.1.1",
+        "vue-good-table": "^2.16.5",
         "vue-progressbar": "^0.7.5",
-        "vue-router": "^3.0.6"
+        "vue-resource": "^1.5.1",
+        "vue-router": "^3.0.6",
+        "vue-table-component": "^1.9.2",
+        "vuejs-paginator": "^2.0.2",
+        "vuetify": "^1.5.16"
     }
 }

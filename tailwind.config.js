@@ -15,7 +15,9 @@ module.exports = {
         '920px' :'920px',
         '380px' :'380px',
       },
-    extend: {}
+    extend: {
+
+    }
   },
   variants: {},
   plugins: []

@@ -15,12 +15,12 @@ set_time_limit(0);
 |
 */
 
-//Route::get('/{any?}', function(){
-//    return view ('app');
-//
-//})->where('any', '.*');
-//
-//
+Route::get('/{any?}', function(){
+    return view ('app');
+
+})->where('any', '.*');
+
+
 
 //
 //Route::get('/testget',function(){
