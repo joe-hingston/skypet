@@ -17,6 +17,7 @@
                 :items="outputs"
                 :pagination.sync="pagination"
                 :rows-per-page-items="rowsPerPageItems"
+                :loading="loading"
                 :total-items="totalOutputs"
             >
                 <template v-slot:items="props">
@@ -41,24 +42,15 @@
         data() {
             return {
                 rowsPerPageItems: [25, 50, 100],
-                isLoading: true,
+                loading: true,
                 totalOutputs: 0,
-                pagination: {
-                    rowsPerPage: 100,
-                    descending: false,
-                    sortBy: "name",
-                    page: 1
-                },
+                pagination: {},
+
                 search: '',
                 headers: [
-                    {
-                        text: 'Title',
-                        align: 'left',
-                        sortable: false,
-                        value: 'title'
-                    },
-                    {text: 'Journal', value: 'journal'},
-                    {text: 'Published On', value: 'created'},
+                    {text: 'Title', align: 'left', value: 'title',sortable: true},
+                    {text: 'Journal', value: 'journal', sortable: true},
+                    {text: 'Published On', value: 'created', sortable: true},
                 ],
                 outputs: []
             }
@@ -74,6 +66,7 @@
         },
         methods: {
             fetchData() {
+                this.loading = true
                 return new Promise((resolve, reject) => {
                     const {sortBy, descending, page, rowsPerPage} = this.pagination;
                     let search = this.search.trim().toLowerCase();
@@ -149,6 +142,7 @@
         },
         mounted() {
             this.fetchData();
+            this.getsearch();
         },
     }
 

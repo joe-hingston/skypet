@@ -6,7 +6,7 @@
 
     <title>SkyPet</title>
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
-</head>z
+</head>
 <body class="font-sans">
 
 <div id="app">
@@ -41,7 +41,7 @@
 
                     <section>
                         <div class="uppercase font-bold mb-5 text-base">Data</div>
-
+                        <div class="pt-3 mb-8">
                         <ul class="list-reset">
                             <li class="text-lg py-3 leading-loose">
                                 <router-link class="text-black" to="/journals">Journals</router-link>
@@ -56,6 +56,18 @@
                                 <router-link class="text-black" to="/test">Paignation Test</router-link>
                             </li>
                         </ul>
+                        </div>
+                    </section>
+
+                    <section>
+                        <div class="uppercase font-bold mb-5 text-base">Admin</div>
+                        <div class="pt-3 mb-8">
+                        <ul class="list-reset">
+                            <li class="text-lg py-3 leading-loose">
+                                <router-link class="text-black" to="/journalAdmin">JournalAdmin</router-link>
+                            </li>
+                        </ul>
+                        </div>
                     </section>
 
                 </aside>

@@ -7,6 +7,7 @@ import Outputs from './components/Outputs';
 import WhatWeDo from './components/WhatWeDo';
 import NotFound from './components/NotFound';
 import Test from './components/Test';
+import JournalAdmin from './components/JournalAdmin';
 
 const LoadersAndAnimations = () =>
     import(/* webpackChunkName: "loaders-and-animations.bundle" */ './components/LoadersAndAnimations');
@@ -66,6 +67,11 @@ export default {
             path: '/test',
             component: Test,
             name: 'test'
+        },
+        {
+            path: '/journalAdmin',
+            component: JournalAdmin,
+            name: 'JournalAdmin'
         }
     ]
 
