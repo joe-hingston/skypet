@@ -16,7 +16,7 @@
         data () {
             return {
                 outputs: [],
-                resource_url: '/api/output',
+                resource_url: '/api/outputs',
             }
         },
         components: {

@@ -25,3 +25,4 @@ Route::group(['middleware' => \Barryvdh\Cors\HandleCors::class], function() {
 
 
 Route::resource('outputs', 'API\Outputs');
+Route::resource('journals', 'API\Journals');

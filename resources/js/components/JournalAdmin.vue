@@ -1,224 +1,182 @@
 <template>
+
     <div>
-        <v-toolbar flat color="white">
-            <v-toolbar-title>My CRUD</v-toolbar-title>
-            <v-divider
-                class="mx-2"
-                inset
-                vertical
-            ></v-divider>
-            <v-spacer></v-spacer>
-            <v-dialog v-model="dialog" max-width="500px">
-                <template v-slot:activator="{ on }">
-                    <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+        <v-app id="inspire">
+            <v-toolbar color="white" flat>
+                <v-toolbar-title>Journals</v-toolbar-title>
+
+                <v-spacer></v-spacer>
+
+                <v-dialog max-width="500px" v-model="dialog2">
+                    <v-card>
+                        <v-card-title>
+                            Error
+                        </v-card-title>
+                        <v-card-text>
+                            {{errorText}}
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-btn @click="dialog2=false" color="primary" flat>Close</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+
+                <v-dialog max-width="1000px" v-model="dialog">
+                    <template v-slot:activator="{ on }">
+                        <v-btn class="mb-2" color="primary" dark v-on="on">Add Issn</v-btn>
+                    </template>
+                    <v-card>
+                        <v-card-title>
+                            <span class="headline">{{ formTitle }}</span>
+                        </v-card-title>
+
+                        <v-card-text>
+                            <v-container grid-list-md>
+                                <v-layout wrap>
+                                    <v-flex md4>
+                                        <v-text-field label="Name" v-model="editedItem.title"></v-text-field>
+                                    </v-flex>
+                                    <v-flex md4 sm6 xs12>
+                                        <v-text-field label="ISSN" v-model="editedItem.issn"></v-text-field>
+                                    </v-flex>
+                                </v-layout>
+                            </v-container>
+                        </v-card-text>
+
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn @click="close" color="blue darken-1" flat>Cancel</v-btn>
+                            <v-btn @click="save" color="blue darken-1" flat>Save</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </v-toolbar>
+
+            <v-data-table
+                :headers="headers"
+                :items="journals"
+                class="elevation-1"
+            >
+
+                <template v-slot:items="props">
+                    <td>{{ props.item.title }}</td>
+                    <td class="text-xs-right">{{ props.item.issn }}</td>
+                    <td class="text-xs-right">{{ props.item.updated_at}}</td>
+                    <td class="justify-center layout px-0">
+                        <v-icon
+                            @click="editItem(props.item)"
+                            class="mr-2"
+                            small
+                        >
+                            edit
+                        </v-icon>
+                        <v-icon
+                            @click="deleteItem(props.item)"
+                            small
+                        >
+                            delete
+                        </v-icon>
+
+                    </td>
                 </template>
-                <v-card>
-                    <v-card-title>
-                        <span class="headline">{{ formTitle }}</span>
-                    </v-card-title>
-
-                    <v-card-text>
-                        <v-container grid-list-md>
-                            <v-layout wrap>
-                                <v-flex xs12 sm6 md4>
-                                    <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
-                                </v-flex>
-                                <v-flex xs12 sm6 md4>
-                                    <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
-                                </v-flex>
-                                <v-flex xs12 sm6 md4>
-                                    <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
-                                </v-flex>
-                                <v-flex xs12 sm6 md4>
-                                    <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
-                                </v-flex>
-                                <v-flex xs12 sm6 md4>
-                                    <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-card-text>
-
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-                        <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
-        </v-toolbar>
-        <v-data-table
-            :headers="headers"
-            :items="desserts"
-            class="elevation-1"
-        >
-            <template v-slot:items="props">
-                <td>{{ props.item.name }}</td>
-                <td class="text-xs-right">{{ props.item.calories }}</td>
-                <td class="text-xs-right">{{ props.item.fat }}</td>
-                <td class="text-xs-right">{{ props.item.carbs }}</td>
-                <td class="text-xs-right">{{ props.item.protein }}</td>
-                <td class="justify-center layout px-0">
-                    <v-icon
-                        small
-                        class="mr-2"
-                        @click="editItem(props.item)"
-                    >
-                        edit
-                    </v-icon>
-                    <v-icon
-                        small
-                        @click="deleteItem(props.item)"
-                    >
-                        delete
-                    </v-icon>
-                </td>
-            </template>
-            <template v-slot:no-data>
-                <v-btn color="primary" @click="initialize">Reset</v-btn>
-            </template>
-        </v-data-table>
+                <template v-slot:no-data>
+                    <v-btn @click="initialize" color="primary">Reset</v-btn>
+                </template>
+            </v-data-table>
+        </v-app>
     </div>
 </template>
 <script>
     export default {
         data: () => ({
+            alert: true,
+            rowsPerPageItems: [25, 50, 100],
+            loading: true,
+            totalJournals: 0,
             dialog: false,
+            dialog2: false,
             headers: [
-                {
-                    text: 'Dessert (100g serving)',
-                    align: 'left',
-                    sortable: false,
-                    value: 'name'
-                },
-                { text: 'Calories', value: 'calories' },
-                { text: 'Fat (g)', value: 'fat' },
-                { text: 'Carbs (g)', value: 'carbs' },
-                { text: 'Protein (g)', value: 'protein' },
-                { text: 'Actions', value: 'name', sortable: false }
+                {text: 'Name', value: 'name', sortable: true},
+                {text: 'ISSN', value: 'issn', sortable: true},
+                {text: 'Last Updated', value: 'lastupdated', sortable: true},
             ],
-            desserts: [],
+            journals: [],
             editedIndex: -1,
             editedItem: {
                 name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0
+                issn: 0,
+                lastedited: 0,
+                lastupdated: 0,
             },
             defaultItem: {
                 name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0
-            }
+                issn: 0,
+                lastedited: 0,
+                lastupdated: 0,
+            },
+            saveitem: false,
         }),
 
+
+
         computed: {
-            formTitle () {
+            formTitle() {
                 return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+            },
+            errorText() {
+                return 'The ISSN you provided is incorrect'
             }
         },
 
         watch: {
-            dialog (val) {
+            dialog(val) {
                 val || this.close()
             }
         },
 
-        created () {
+        mounted() {
+            this.fetchData();
+        },
+        created() {
             this.initialize()
         },
 
         methods: {
-            initialize () {
-                this.desserts = [
-                    {
-                        name: 'Frozen Yogurt',
-                        calories: 159,
-                        fat: 6.0,
-                        carbs: 24,
-                        protein: 4.0
-                    },
-                    {
-                        name: 'Ice cream sandwich',
-                        calories: 237,
-                        fat: 9.0,
-                        carbs: 37,
-                        protein: 4.3
-                    },
-                    {
-                        name: 'Eclair',
-                        calories: 262,
-                        fat: 16.0,
-                        carbs: 23,
-                        protein: 6.0
-                    },
-                    {
-                        name: 'Cupcake',
-                        calories: 305,
-                        fat: 3.7,
-                        carbs: 67,
-                        protein: 4.3
-                    },
-                    {
-                        name: 'Gingerbread',
-                        calories: 356,
-                        fat: 16.0,
-                        carbs: 49,
-                        protein: 3.9
-                    },
-                    {
-                        name: 'Jelly bean',
-                        calories: 375,
-                        fat: 0.0,
-                        carbs: 94,
-                        protein: 0.0
-                    },
-                    {
-                        name: 'Lollipop',
-                        calories: 392,
-                        fat: 0.2,
-                        carbs: 98,
-                        protein: 0
-                    },
-                    {
-                        name: 'Honeycomb',
-                        calories: 408,
-                        fat: 3.2,
-                        carbs: 87,
-                        protein: 6.5
-                    },
-                    {
-                        name: 'Donut',
-                        calories: 452,
-                        fat: 25.0,
-                        carbs: 51,
-                        protein: 4.9
-                    },
-                    {
-                        name: 'KitKat',
-                        calories: 518,
-                        fat: 26.0,
-                        carbs: 65,
-                        protein: 7
-                    }
-                ]
+            fetchData() {
+                this.loading = true
+                return new Promise((resolve, reject) => {
+
+                    this.$http
+                        .get(
+                            "http://skypet.lar/api/journals"
+                        )
+                        .then(response => {
+                            let journals = response.data;
+                            const totalJournals = response.data.total;
+                            this.journals = journals;
+                            this.totalJournals = totalJournals;
+                            this.loading = false;
+                            resolve();
+
+                        });
+                });
+
+            },
+            initialize() {
             },
 
-            editItem (item) {
-                this.editedIndex = this.desserts.indexOf(item)
+            editItem(item) {
+                this.editedIndex = this.journals.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialog = true
             },
 
-            deleteItem (item) {
-                const index = this.desserts.indexOf(item)
-                confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+            deleteItem(item) {
+                const index = this.journals.indexOf(item)
+                confirm('Are you sure you want to delete this item?') && this.journals.splice(index, 1)
             },
 
-            close () {
+            close() {
                 this.dialog = false
                 setTimeout(() => {
                     this.editedItem = Object.assign({}, this.defaultItem)
@@ -226,14 +184,58 @@
                 }, 300)
             },
 
-            save () {
+            checkItem(item) {
+                return new Promise((resolve, reject) => {
+
+                    this.$http
+                        .get("http://api.crossref.org/journals/"
+                            + item.issn
+                        )
+                        .then(response => {
+                            if (response.status === 404) {
+                                this.saveitem = false;
+                            }
+
+                            if (response.status === 200) {
+                                this.saveitem = true;
+                            }
+                            resolve();
+                        })
+                });
+            },
+
+            save() {
+
                 if (this.editedIndex > -1) {
-                    Object.assign(this.desserts[this.editedIndex], this.editedItem)
-                } else {
-                    this.desserts.push(this.editedItem)
+                    Object.assign(this.journals[this.editedIndex], this.editedItem)
+
+                  //  checkItem(this.editedItem)
+
+                    //
+                    //     if (this.checkItem(this.editedItem)) {
+                    //         console.log('should be okay to save')
+                    //         this.journals.push(this.editedItem)
+                    //         //api function to add
+                    //     }
+                    //
+                    // } else if (!this.checkItem(this.editedItem)) {
+                    //     //
+                    //     console.log('is not okay to save')
+                    //     this.dialog2 = true
+                    // }
                 }
                 this.close()
-            }
-        }
+
+                if (this.editedIndex = -1) {
+                    this.checkItem(this.editedItem);
+                    console.log(this.saveitem);
+                }
+                this.close()
+            },
+
+
+        },
     }
+
 </script>
+//TODO need to add in Vdialog for error on API check, and add journal through API
