@@ -87,7 +87,12 @@
     </div>
 </template>
 <script>
+    import axios from 'axios';
+
+    const API_URL = 'http://localhost:8000';
     export default {
+
+
         data: () => ({
             alert: true,
             rowsPerPageItems: [25, 50, 100],
@@ -115,8 +120,8 @@
                 lastupdated: 0,
             },
             saveitem: false,
+            status: 0
         }),
-
 
 
         computed: {
@@ -136,12 +141,14 @@
 
         mounted() {
             this.fetchData();
+            this.checkItem();
         },
         created() {
             this.initialize()
         },
 
         methods: {
+
             fetchData() {
                 this.loading = true
                 return new Promise((resolve, reject) => {
@@ -184,32 +191,19 @@
                 }, 300)
             },
 
-            checkItem(item) {
-                return new Promise((resolve, reject) => {
+             checkItem() {
 
-                    this.$http
-                        .get("http://api.crossref.org/journals/"
-                            + item.issn
-                        )
-                        .then(response => {
-                            if (response.status === 404) {
-                                this.saveitem = false;
-                            }
-
-                            if (response.status === 200) {
-                                this.saveitem = true;
-                            }
-                            resolve();
-                        })
-                });
+                const  url = `http://api.crossref.org/journals/` + this.editedItem.issn;
+                return  axios.get(url);
             },
 
             save() {
+                let self = this
 
                 if (this.editedIndex > -1) {
                     Object.assign(this.journals[this.editedIndex], this.editedItem)
 
-                  //  checkItem(this.editedItem)
+                    //  checkItem(this.editedItem)
 
                     //
                     //     if (this.checkItem(this.editedItem)) {
@@ -227,8 +221,22 @@
                 this.close()
 
                 if (this.editedIndex = -1) {
-                    this.checkItem(this.editedItem);
-                    console.log(this.saveitem);
+
+                   this.checkItem().then(function(response){
+                      if(response.data.status = 'ok'){
+                          //add via API call
+                      }
+
+                   })
+                       .catch(function (error) {
+                           if (error.response) {
+                               if(error.response.status===404){
+                                   self.dialog2 = true
+                               };
+
+                           }
+                       });;
+
                 }
                 this.close()
             },
