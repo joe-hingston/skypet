@@ -2181,7 +2181,7 @@ var API_URL = 'http://localhost:8000';
 
       this.loading = true;
       return new Promise(function (resolve, reject) {
-        _this.$http.get("http://skypet.lar/api/journals").then(function (response) {
+        _this.$http.get("http://homestead.test/api/journals").then(function (response) {
           var journals = response.data;
           var totalJournals = response.data.total;
           _this.journals = journals;
@@ -2237,7 +2237,13 @@ var API_URL = 'http://localhost:8000';
 
       if (this.editedIndex = -1) {
         this.checkItem().then(function (response) {
-          if (response.data.status = 'ok') {//add via API call
+          if (response.data.status = 'ok') {
+            axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('http://homestead.test/api/journals', {
+              issn: this.editItem.issn,
+              lastName: 'Flintstone'
+            }).then(function (res) {
+              console.log(res);
+            });
           }
         })["catch"](function (error) {
           if (error.response) {
@@ -2444,7 +2450,7 @@ __webpack_require__.r(__webpack_exports__);
 
         var search = _this.search.trim().toLowerCase();
 
-        _this.$http.get("http://skypet.lar/api/output?page=" + page + "&rowsPerPage=" + rowsPerPage).then(function (response) {
+        _this.$http.get("http://homestead.test/api/output?page=" + page + "&rowsPerPage=" + rowsPerPage).then(function (response) {
           console.log(response.data);
           var outputs = response.data.data;
           var totalOutputs = response.data.total;
@@ -2474,7 +2480,7 @@ __webpack_require__.r(__webpack_exports__);
 
         var search = _this2.search.trim().toLowerCase();
 
-        _this2.$http.get("http://skypet.lar/api/output?page=" + page + "&rowsPerPage=" + rowsPerPage + "&title=" + search).then(function (response) {
+        _this2.$http.get("http://horizon.test/api/output?page=" + page + "&rowsPerPage=" + rowsPerPage + "&title=" + search).then(function (response) {
           console.log(response.data);
           var outputs = response.data.data;
           var totalOutputs = response.data.total;
@@ -23037,7 +23043,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /*!
-  * vue-router v3.0.6
+  * vue-router v3.0.7
   * (c) 2019 Evan You
   * @license MIT
   */
@@ -24425,10 +24431,8 @@ function createMatcher (
         }
       }
 
-      if (record) {
-        location.path = fillParams(record.path, location.params, ("named route \"" + name + "\""));
-        return _createRoute(record, location, redirectedFrom)
-      }
+      location.path = fillParams(record.path, location.params, ("named route \"" + name + "\""));
+      return _createRoute(record, location, redirectedFrom)
     } else if (location.path) {
       location.params = {};
       for (var i = 0; i < pathList.length; i++) {
@@ -24583,7 +24587,12 @@ var positionStore = Object.create(null);
 function setupScroll () {
   // Fix for #1585 for Firefox
   // Fix for #2195 Add optional third attribute to workaround a bug in safari https://bugs.webkit.org/show_bug.cgi?id=182678
-  window.history.replaceState({ key: getStateKey() }, '', window.location.href.replace(window.location.origin, ''));
+  // Fix for #2774 Support for apps loaded from Windows file shares not mapped to network drives: replaced location.origin with
+  // window.location.protocol + '//' + window.location.host
+  // location.host contains the port and location.hostname doesn't
+  var protocolAndPath = window.location.protocol + '//' + window.location.host;
+  var absolutePath = window.location.href.replace(protocolAndPath, '');
+  window.history.replaceState({ key: getStateKey() }, '', absolutePath);
   window.addEventListener('popstate', function (e) {
     saveScrollPosition();
     if (e.state && e.state.key) {
@@ -25155,7 +25164,6 @@ function bindEnterGuard (
 ) {
   return function routeEnterGuard (to, from, next) {
     return guard(to, from, function (cb) {
-      next(cb);
       if (typeof cb === 'function') {
         cbs.push(function () {
           // #750
@@ -25166,6 +25174,7 @@ function bindEnterGuard (
           poll(cb, match.instances, key, isValid);
         });
       }
+      next(cb);
     })
   }
 }
@@ -25700,7 +25709,7 @@ function createHref (base, fullPath, mode) {
 }
 
 VueRouter.install = install;
-VueRouter.version = '3.0.6';
+VueRouter.version = '3.0.7';
 
 if (inBrowser && window.Vue) {
   window.Vue.use(VueRouter);
@@ -69810,8 +69819,8 @@ var LoadersAndAnimations = function LoadersAndAnimations() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/vagrant/code/skypet/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/vagrant/code/skypet/resources/sass/index.sass */"./resources/sass/index.sass");
+__webpack_require__(/*! C:\Homestead_Projects\homestead\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Homestead_Projects\homestead\resources\sass\index.sass */"./resources/sass/index.sass");
 
 
 /***/ }),

@@ -155,7 +155,7 @@
 
                     this.$http
                         .get(
-                            "http://skypet.lar/api/journals"
+                            "http://homestead.test/api/journals"
                         )
                         .then(response => {
                             let journals = response.data;
@@ -191,11 +191,12 @@
                 }, 300)
             },
 
-             checkItem() {
+            checkItem() {
 
-                const  url = `http://api.crossref.org/journals/` + this.editedItem.issn;
-                return  axios.get(url);
+                const url = `http://api.crossref.org/journals/` + this.editedItem.issn;
+                return axios.get(url);
             },
+
 
             save() {
                 let self = this
@@ -222,20 +223,28 @@
 
                 if (this.editedIndex = -1) {
 
-                   this.checkItem().then(function(response){
-                      if(response.data.status = 'ok'){
-                          //add via API call
-                      }
+                    this.checkItem().then(function (response) {
+                        if (response.data.status = 'ok') {
+                            axios.post('http://homestead.test/api/journals', {
+                                issn: this.editItem.issn,
+                                lastName: 'Flintstone'
+                            })
+                                .then(function (res) {
+                                   console.log(res);
+                                })
+                        }
 
-                   })
-                       .catch(function (error) {
-                           if (error.response) {
-                               if(error.response.status===404){
-                                   self.dialog2 = true
-                               };
+                    })
+                        .catch(function (error) {
+                            if (error.response) {
+                                if (error.response.status === 404) {
+                                    self.dialog2 = true
+                                }
+                                ;
 
-                           }
-                       });;
+                            }
+                        });
+                    ;
 
                 }
                 this.close()

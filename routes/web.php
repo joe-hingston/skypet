@@ -23,14 +23,19 @@ Route::get('/{any?}', function(){
 
 
 //
-//Route::get('/testget',function(){
-//    $user = \App\User::find(1);
-//    foreach ($user->notifications as $notification) {
-//        echo $notification->type;
-//    }
+//Route::get('/testjournalAPI',function(){
+//    $client = new \GuzzleHttp\Client();
+//    $response = $client->request('POST', 'http://homestead.test/api/journals', [
+//        'form_params' => [
+//            'issn' => '1234-1234',
+//        ]
+//    ]);
+//
+//    dd($response->getHeaders());
+//
 //});
-//
-//
+////
+////
 //
 //
 //Route::group([ 'middleware' => ['role:Admin']], function() {

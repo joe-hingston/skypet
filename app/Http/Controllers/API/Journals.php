@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessJournal;
 use App\Journal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class Journals extends Controller
 {
@@ -27,8 +29,19 @@ class Journals extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+//add user verification
+            Log::debug($request->issn);
+           // ProcessJournal::dispatch($request->issn)->onConnection('redis')->onQueue('journals');
+            return response($request)
+                ->header('issn has been added', $request->issn);
+
+        }
+
+//        ProcessJournal::dispatch($issn)->onConnection('redis')->onQueue('journals');
+
+        //ensure user is authorised to do this action
+        //add to the database
+        //start the job to add journal
 
     /**
      * Display the specified resource.

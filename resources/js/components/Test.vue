@@ -73,7 +73,7 @@
 
                     this.$http
                         .get(
-                            "http://skypet.lar/api/output?page=" +
+                            "http://homestead.test/api/output?page=" +
                             page +
                             "&rowsPerPage=" +
                             rowsPerPage
@@ -109,7 +109,7 @@
 
                     this.$http
                         .get(
-                            "http://skypet.lar/api/output?page=" +
+                            "http://horizon.test/api/output?page=" +
                             page +
                             "&rowsPerPage=" +
                             rowsPerPage +
