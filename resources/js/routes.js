@@ -6,8 +6,8 @@ import MachineLearning from './components/MachineLearning';
 import Outputs from './components/Outputs';
 import WhatWeDo from './components/WhatWeDo';
 import NotFound from './components/NotFound';
-import Test from './components/Test';
 import JournalAdmin from './components/JournalAdmin';
+import JournalView from './components/JournalView';
 
 const LoadersAndAnimations = () =>
     import(/* webpackChunkName: "loaders-and-animations.bundle" */ './components/LoadersAndAnimations');
@@ -54,24 +54,24 @@ export default {
             name: 'machinelearning'
         },
         {
-            path: '/outputs',
-            component: Outputs,
-            name: 'outputs'
-        },
-        {
             path: '/whatwedo',
             component: WhatWeDo,
             name: 'whatwedo'
         },
         {
-            path: '/test',
-            component: Test,
-            name: 'test'
+            path: '/outputs',
+            component: Outputs,
+            name: 'outputs'
         },
         {
             path: '/journalAdmin',
             component: JournalAdmin,
             name: 'JournalAdmin'
+        },
+        {
+            path: '/journalView',
+            component: JournalView,
+            name: 'JournalView'
         }
     ]
 

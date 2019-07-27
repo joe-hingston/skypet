@@ -22,7 +22,8 @@ import VueRouter from 'vue-router';
 import routes from './routes';
 import VueResource from 'vue-resource';
 import { TableComponent, TableColumn } from 'vue-table-component';
-import Vuetify from 'vuetify'
+import Vuetify from 'vuetify';
+import Card from 'vuetify-material-dashboard';
 
 Vue.component('table-component', TableComponent);
 Vue.component('table-column', TableColumn);
@@ -30,6 +31,7 @@ Vue.component('table-column', TableColumn);
 Vue.use(VueResource);
 Vue.use(VueRouter);
 Vue.use(Vuetify);
+Vue.use(Card);
 
 
 const app = new Vue({

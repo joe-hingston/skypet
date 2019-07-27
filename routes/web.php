@@ -1,8 +1,6 @@
 <?php
 
 
-use GuzzleHttp\Client;
-
 set_time_limit(0);
 /*
 |--------------------------------------------------------------------------
@@ -15,24 +13,20 @@ set_time_limit(0);
 |
 */
 
-Route::get('/{any?}', function(){
-    return view ('app');
+Route::get('/{any?}', function () {
+    return view('app');
 
 })->where('any', '.*');
 
 
-
-//
-//Route::get('/testjournalAPI',function(){
+//Route::get('/testjournalAPI', function () {
 //    $client = new \GuzzleHttp\Client();
-//    $response = $client->request('POST', 'http://homestead.test/api/journals', [
+//    $response = $client->request('DELETE', 'http://skypet.lar/api/journals/', [
 //        'form_params' => [
 //            'issn' => '1234-1234',
 //        ]
 //    ]);
-//
 //    dd($response->getHeaders());
-//
 //});
 ////
 ////

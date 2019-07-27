@@ -7,7 +7,7 @@
 
                 <v-spacer></v-spacer>
 
-                <v-dialog max-width="500px" v-model="dialog2">
+                <v-dialog max-width="400px" v-model="dialog2">
                     <v-card>
                         <v-card-title>
                             Error
@@ -21,7 +21,7 @@
                     </v-card>
                 </v-dialog>
 
-                <v-dialog max-width="1000px" v-model="dialog">
+                <v-dialog max-width="400px" v-model="dialog">
                     <template v-slot:activator="{ on }">
                         <v-btn class="mb-2" color="primary" dark v-on="on">Add Issn</v-btn>
                     </template>
@@ -33,10 +33,7 @@
                         <v-card-text>
                             <v-container grid-list-md>
                                 <v-layout wrap>
-                                    <v-flex md4>
-                                        <v-text-field label="Name" v-model="editedItem.title"></v-text-field>
-                                    </v-flex>
-                                    <v-flex md4 sm6 xs12>
+                                    <v-flex md12 sm24 xs48>
                                         <v-text-field label="ISSN" v-model="editedItem.issn"></v-text-field>
                                     </v-flex>
                                 </v-layout>
@@ -61,20 +58,36 @@
                 <template v-slot:items="props">
                     <td>{{ props.item.title }}</td>
                     <td class="text-xs-right">{{ props.item.issn }}</td>
+                    <td class="text-xs-right">{{ props.item.total_articles}}</td>
                     <td class="text-xs-right">{{ props.item.updated_at}}</td>
-                    <td class="justify-center layout px-0">
-                        <v-icon
-                            @click="editItem(props.item)"
-                            class="mr-2"
-                            small
-                        >
-                            edit
-                        </v-icon>
+                    <td class="justify-center layout px-3">
+
                         <v-icon
                             @click="deleteItem(props.item)"
                             small
                         >
                             delete
+                        </v-icon>
+
+                        <v-icon
+                            @click="deleteItem(props.item)"
+                            small
+                        >
+                            refresh
+                        </v-icon>
+
+                        <v-icon
+                            @click="deleteItem(props.item)"
+                            small
+                        >
+                            offline_pin
+                        </v-icon>
+
+                        <v-icon
+                            @click="deleteItem(props.item)"
+                            small
+                        >
+                            send
                         </v-icon>
 
                     </td>
@@ -87,9 +100,12 @@
     </div>
 </template>
 <script>
-    import axios from 'axios';
 
-    const API_URL = 'http://localhost:8000';
+    import {APIService} from './scripts/APIService';
+
+    const apiService = new APIService();
+
+
     export default {
 
 
@@ -101,9 +117,11 @@
             dialog: false,
             dialog2: false,
             headers: [
-                {text: 'Name', value: 'name', sortable: true},
+                {text: 'Name', value: 'name', sortable: false},
                 {text: 'ISSN', value: 'issn', sortable: true},
+                {text: 'Total Articles', value: 'total_articles', sortable: true},
                 {text: 'Last Updated', value: 'lastupdated', sortable: true},
+                {text: 'Actions', value: 'actions', sortable: false},
             ],
             journals: [],
             editedIndex: -1,
@@ -120,13 +138,12 @@
                 lastupdated: 0,
             },
             saveitem: false,
-            status: 0
         }),
 
 
         computed: {
             formTitle() {
-                return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+                return this.editedIndex === -1 ? 'Add Journal' : 'Edit Item'
             },
             errorText() {
                 return 'The ISSN you provided is incorrect'
@@ -141,7 +158,6 @@
 
         mounted() {
             this.fetchData();
-            this.checkItem();
         },
         created() {
             this.initialize()
@@ -150,22 +166,14 @@
         methods: {
 
             fetchData() {
-                this.loading = true
-                return new Promise((resolve, reject) => {
+                this.loading = true;
+                return new apiService.getJournals().then((data) => {
+                    let journals = data;
+                    const totalJournals = data.total;
+                    this.journals = journals;
+                    this.totalJournals = totalJournals;
+                    this.loading = false;
 
-                    this.$http
-                        .get(
-                            "http://homestead.test/api/journals"
-                        )
-                        .then(response => {
-                            let journals = response.data;
-                            const totalJournals = response.data.total;
-                            this.journals = journals;
-                            this.totalJournals = totalJournals;
-                            this.loading = false;
-                            resolve();
-
-                        });
                 });
 
             },
@@ -173,86 +181,59 @@
             },
 
             editItem(item) {
-                this.editedIndex = this.journals.indexOf(item)
-                this.editedItem = Object.assign({}, item)
+                this.editedIndex = this.journals.indexOf(item);
+                this.editedItem = Object.assign({}, item);
                 this.dialog = true
             },
 
             deleteItem(item) {
-                const index = this.journals.indexOf(item)
-                confirm('Are you sure you want to delete this item?') && this.journals.splice(index, 1)
+                this.editedIndex = this.journals.indexOf(item);
+                this.editedItem = Object.assign({}, item);
+
+                if(confirm('Are you sure you want to delete this item?')){
+                    this.journals.splice(this.editedIndex, 1);
+                    apiService.deleteJournal(this.editedItem.issn).then((data) => {
+                    });
+                }
+
             },
 
             close() {
-                this.dialog = false
+                this.dialog = false;
                 setTimeout(() => {
-                    this.editedItem = Object.assign({}, this.defaultItem)
+                    this.editedItem = Object.assign({}, this.defaultItem);
                     this.editedIndex = -1
                 }, 300)
             },
 
-            checkItem() {
-
-                const url = `http://api.crossref.org/journals/` + this.editedItem.issn;
-                return axios.get(url);
-            },
-
 
             save() {
-                let self = this
 
-                if (this.editedIndex > -1) {
-                    Object.assign(this.journals[this.editedIndex], this.editedItem)
-
-                    //  checkItem(this.editedItem)
-
-                    //
-                    //     if (this.checkItem(this.editedItem)) {
-                    //         console.log('should be okay to save')
-                    //         this.journals.push(this.editedItem)
-                    //         //api function to add
-                    //     }
-                    //
-                    // } else if (!this.checkItem(this.editedItem)) {
-                    //     //
-                    //     console.log('is not okay to save')
-                    //     this.dialog2 = true
-                    // }
-                }
-                this.close()
-
-                if (this.editedIndex = -1) {
-
-                    this.checkItem().then(function (response) {
-                        if (response.data.status = 'ok') {
-                            axios.post('http://homestead.test/api/journals', {
-                                issn: this.editItem.issn,
-                                lastName: 'Flintstone'
+                let self = this;
+                if (this.editedIndex === -1) {
+                    //add item
+                    apiService.checkCrossRefJournal(this.editedItem.issn).then((data) => {
+                        if (data.status === 200) {
+                            apiService.createJournal(this.editedItem.issn).then((data) => {
                             })
-                                .then(function (res) {
-                                   console.log(res);
-                                })
+
                         }
-
-                    })
-                        .catch(function (error) {
-                            if (error.response) {
-                                if (error.response.status === 404) {
-                                    self.dialog2 = true
-                                }
-                                ;
-
+                    }).catch(function (error) {
+                        if (error.response) {
+                            if (error.response.status === 404) {
+                                console.log('hello');
+                                self.dialog2 = true
                             }
-                        });
-                    ;
 
+                        }
+                    });
                 }
                 this.close()
             },
 
 
-        },
+        }
+        ,
     }
 
 </script>
-//TODO need to add in Vdialog for error on API check, and add journal through API

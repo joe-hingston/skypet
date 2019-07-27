@@ -29,15 +29,11 @@ class Journals extends Controller
      */
     public function store(Request $request)
     {
-//add user verification
-            Log::debug($request->issn);
-           // ProcessJournal::dispatch($request->issn)->onConnection('redis')->onQueue('journals');
+            ProcessJournal::dispatch($request->issn)->onConnection('redis')->onQueue('journals');
             return response($request)
                 ->header('issn has been added', $request->issn);
-
         }
 
-//        ProcessJournal::dispatch($issn)->onConnection('redis')->onQueue('journals');
 
         //ensure user is authorised to do this action
         //add to the database
@@ -72,8 +68,9 @@ class Journals extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroyByISSN(Request $request)
     {
-        //
+        Log::debug($request->issn);
+//        Journal::where('issn', $request->issn)->firstorFail();
     }
 }
